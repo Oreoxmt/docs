@@ -16,6 +16,8 @@ jobs:
       run: ./scripts/verify-links.sh
     - name: Verify internal link anchors
       run: ./scripts/verify-link-anchors.sh
+    - name: Check front matter
+      run: ./scripts/check-front-matter.sh
 
   vale:
     runs-on: ubuntu-latest
@@ -35,3 +37,4 @@ jobs:
         # Required, set by GitHub actions automatically:
         # https://docs.github.com/en/actions/security-guides/automatic-token-authentication#about-the-github_token-secret
         GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
+
