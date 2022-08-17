@@ -61,7 +61,7 @@ jobs:
       - name: Vale Linter
         uses: errata-ai/vale-action@v1.4.3
         with:
-          reporter: github-check
+          reporter: github-pr-check
           # Optional
           # Specify file path to lint
           #files: .
