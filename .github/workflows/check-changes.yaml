@@ -18,6 +18,6 @@ jobs:
           curl \
             -H "Accept: application/vnd.github.diff" \
             -H "Authorization: token ${{secrets.GITHUB_TOKEN}}" \
-            https://api.github.com/repos/OWNER/REPO/pulls/PULL_NUMBER
+            ${{ github.event.pull_request.diff_url}}
         env:
           GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
