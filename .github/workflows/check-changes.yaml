@@ -1,0 +1,23 @@
+name: Check Changes
+
+on:
+  pull_request:
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out
+        uses: actions/checkout@v2
+      - run: |
+          echo $pr
+        env:
+          pr: ${{ toJson(github) }}
+      - name: Check changes
+        run: |
+          curl \
+            -H "Accept: application/vnd.github.diff" \
+            -H "Authorization: token ${{secrets.GITHUB_TOKEN}}" \
+            https://api.github.com/repos/OWNER/REPO/pulls/PULL_NUMBER
+        env:
+          GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
