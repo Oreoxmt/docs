@@ -11,14 +11,9 @@ jobs:
         uses: actions/checkout@v3
         with:
           fetch-depth: 0
-      - name: echo
-        run: |
-          echo $pr
-        env:
-          pr: ${{ toJson(github) }}
       - name: Check changes
         run: |
-          git diff --name-only --diff-filter 'D' '${{ github.event.pull_request.base.sha }}' '${{ github.event.pull_request.head.sha }}' | grep -E '^media/.*(jpg|png|jpeg)$' > /tmp/changed_files
+          git diff --name-only --diff-filter 'D' '${{ github.event.pull_request.base.sha }}' '${{ github.event.pull_request.head.sha }}' | grep -E '^media/.*\.(jpg|png|jpeg)$' > /tmp/changed_files
           if [[ "$?" == "0" ]]; then
             cat /tmp/changed_files
             echo '{"name":"Image","head_sha":"${{ github.event.pull_request.head.sha }}","status":"completed","conclusion":"failure"}' > /tmp/body.json
