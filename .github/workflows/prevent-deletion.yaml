@@ -21,9 +21,15 @@ jobs:
           git diff --name-only --diff-filter 'D' '${{ github.event.pull_request.base.sha }}' '${{ github.event.pull_request.head.sha }}' | grep -E '^media/.*(jpg|png|jpeg)$' > /tmp/changed_files
           if [[ "$?" == "0" ]]; then
             cat /tmp/changed_files
-            echo '{"name":"Image Deletion Check","head_sha":"${{ github.event.pull_request.head.sha }}","status":"completed","conclusion":"failure","output":{"title":"Image Deletion Check Report","summary":"tt","text":""}}' > /tmp/body.json
+            echo '{"name":"Image","head_sha":"${{ github.event.pull_request.head.sha }}","status":"completed","conclusion":"failure"}' > /tmp/body.json
+            jq \
+              --arg count "$(wc -l /tmp/changed_files | awk '{print $1}')" \
+              --arg summary "$(cat /tmp/changed_files | sed 's/^/- /')" \
+              '.output.title = "Found " + $count + " deleted images" | .output.summary = $summary' \
+            /tmp/body.json > /tmp/body2.json
+
           else
-            echo '{"name":"Image Deletion Check","head_sha":"${{ github.event.pull_request.head.sha }}","status":"completed","conclusion":"success","output":{"title":"Image Deletion Check Report","summary":"tt","text":""}}' > /tmp/body.json
+            echo '{"name":"Image","head_sha":"${{ github.event.pull_request.head.sha }}","status":"completed","conclusion":"success","output":{"title":"OK","summary":"No deleted images"}}' > /tmp/body2.json
           fi
       - name: Create a check run
         run: |
@@ -32,6 +38,6 @@ jobs:
             -H "Accept: application/vnd.github+json" \
             -H "Authorization: token $GITHUB_TOKEN" \
             'https://api.github.com/repos/${{ github.repository }}/check-runs' \
-            -T '/tmp/body.json'
+            -T '/tmp/body2.json'
         env:
           GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
