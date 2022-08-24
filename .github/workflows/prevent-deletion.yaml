@@ -1,4 +1,4 @@
-name: Check Changes
+name: Prevent Deletion
 
 on:
   pull_request:
@@ -8,16 +8,15 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Check out
-        uses: actions/checkout@v2
-      - run: |
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+        run: |
           echo $pr
         env:
           pr: ${{ toJson(github) }}
       - name: Check changes
         run: |
-          curl \
-            -H "Accept: application/vnd.github.diff" \
-            -H "Authorization: token ${{secrets.GITHUB_TOKEN}}" \
-            ${{ github.event.pull_request.diff_url}}
+          CHANGED_FILES=$(git diff --name-status --diff-filter 'D' ${{ github.pull_request.head.sha }} ${{ github.pull_request.base.sha }})
         env:
           GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
