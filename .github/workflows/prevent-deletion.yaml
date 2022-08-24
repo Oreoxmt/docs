@@ -11,10 +11,6 @@ jobs:
         uses: actions/checkout@v3
         with:
           fetch-depth: 0
-        run: |
-          echo $pr
-        env:
-          pr: ${{ toJson(github) }}
       - name: Check changes
         run: |
           git diff --name-only --diff-filter 'D' '{{ github.pull_request.head.sha }}' '{{ github.pull_request.base.sha }}' | grep -E '^media/.*(jpg|png|jpeg)$' > /tmp/changed_files.txt
