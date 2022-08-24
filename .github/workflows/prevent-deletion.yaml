@@ -18,7 +18,7 @@ jobs:
           pr: ${{ toJson(github) }}
       - name: Check changes
         run: |
-          git diff --name-only --diff-filter 'D' '${{ github.pull_request.head.sha }}' '${{ github.pull_request.base.sha }}' | grep -E '^media/.*(jpg|png|jpeg)$' > /tmp/changed_files.txt
+          git diff --name-only --diff-filter 'D' '${{ github.event.pull_request.base.sha }}' '${{ github.event.pull_request.head.sha }}' | grep -E '^media/.*(jpg|png|jpeg)$' > /tmp/changed_files.txt
           if [[ "$?" == "0" ]]; then
             # TODO: Changed
             echo /tmp/changed_files
