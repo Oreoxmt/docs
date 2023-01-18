@@ -1,0 +1,22 @@
+name: Build and Deploy
+
+on:
+  pull_request:
+    branches:
+      - master
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Clone repository
+      run: |
+        git clone https://github.com/Oreoxmt/pingcap-docs-website-scaffold.git /home/runner/work/pingcap-docs-website-scaffold
+        echo $PWD
+        ls -la
+        cp -r . /home/runner/work/pingcap-docs-website-scaffold/markdown-pages/en/tidb/master
+        cd /home/runner/work/pingcap-docs-website-scaffold && ./build.sh
