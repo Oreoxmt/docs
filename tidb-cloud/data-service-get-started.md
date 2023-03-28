@@ -27,7 +27,10 @@ A Data App is a group of endpoints that you can use to access data for a specifi
 
 2. In the left navigation pane, click <MDSvgIcon name="icon-left-data-service" /> **Data Service**.
 
-3. On the **Get started by creating your first data application** page, enter a name for the Data App and click **Create Data App**. The [**Data Service**](https://tidbcloud.com/console/dataservice) details page is displayed.
+<!--TODO: add a drop-down list: select clusters-->
+3. On the **Get started by creating your first data application** page, enter a name and select clusters that your Data App can access.
+
+4. Click **Create Data App**. The [**Data Service**](https://tidbcloud.com/console/dataservice) details page is displayed.
 
 ## Step 2. Develop an endpoint
 
@@ -62,11 +65,13 @@ On the right pane, click the **Properties** tab and set properties for the endpo
 
 You can customize SQL statements for the endpoint in the SQL editor, which is the middle pane on the **Data Service** page.
 
+<!--TODO: update the drop-down list: Select a cluster-->
+
 1. Select a cluster.
 
     > **Note:**
     >
-    > Only clusters in the **Available** state are displayed in the drop-down list.
+    > Only clusters that are linked to the Data App are displayed in the drop-down list. To manage the linked clusters, see [Manage linked clusters](/tidb-cloud/data-service-manage-data-app.md#manage-linked-clusters).
 
     On the upper part of the SQL editor, select a cluster on which the SQL statements are executed from the drop-down list. Then, you can view all databases of this cluster in the **Schema** tab on the right pane.
 
@@ -122,14 +127,20 @@ You can call the endpoint by sending an HTTPS request. Before calling an endpoin
 ### 1. Create an API key
 
 1. In the left pane of the [**Data Service**](https://tidbcloud.com/console/dataservice) page, click the name of your Data App to view its details.
-
 2. In the **API Key** area, click **Create API Key**.
+<!--TODO: add API key role (ReadOnly and ReadAndWrite)-->
+3. In the **Create API Key** dialog box, enter a description and select a role for your API key.
 
-3. In the **Create API Key** dialog box, enter a description for your API key, and then click **Next**. The private key and public key are displayed.
+    The role is used to control whether the API key can read or write data to the clusters linked to the Data App. You can select the `ReadOnly` or `ReadAndWrite` role:
+
+    - `ReadOnly`: only allows the API key to read data, such as a `SELECT` statement.
+    - `ReadAndWrite`: allows the API key to read and write data. You can use this API key to execute all SQL statements, such as DML and DDL statements.
+
+4. Click **Next**. The public key and private key are displayed.
 
     Make sure that you have copied and saved the private key in a secure location. After leaving this page, you will not be able to get the full private key again.
 
-4. Click **Done**.
+5. Click **Done**.
 
 ### 2. Get the code example
 
@@ -157,7 +168,7 @@ TiDB Cloud generates code examples to help you call an endpoint. To get the code
     <div label="Online Environment">
 
     You must deploy your endpoint first before checking the code example in the online environment.
-    
+
     To call the current online version of the endpoint, use the following command:
 
     ```bash
@@ -201,14 +212,13 @@ After calling an endpoint, you can see the response in JSON format. The followin
     ],
     "result": {
       "code": 200,
-      "message": "ok",
+      "message": "Query OK!",
       "start_ms": 1678965476709,
       "end_ms": 1678965476839,
       "latency": "130ms",
       "row_count": 1,
       "row_affect": 0,
-      "limit": 50,
-      "query": "Query OK!"
+      "limit": 50
     }
   }
 }
