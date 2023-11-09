@@ -306,7 +306,7 @@ Compared with TiDB [6.4.0-DMR](/releases/release-6.4.0.md), TiDB 6.5.0 introduce
 ### System variables
 
 | Variable name | Change type | Description |
-|--------|------------------------------|------|
+|------------------------------|---------------|---------------------------------------------|
 |`tidb_enable_amend_pessimistic_txn`| Deprecated | Starting from v6.5.0, this variable is deprecated, and TiDB uses the [Metadata Lock](/metadata-lock.md) feature by default to avoid the `Information schema is changed` error. |
 | [`tidb_enable_outer_join_reorder`](/system-variables.md#tidb_enable_outer_join_reorder-new-in-v610) | Modified | Changes the default value from `OFF` to `ON` after further tests, meaning that the support of Outer Join for the [Join Reorder](/join-reorder.md) algorithm is enabled by default. |
 | [`tidb_cost_model_version`](/system-variables.md#tidb_cost_model_version-new-in-v620) | Modified | Changes the default value from `1` to `2` after further tests, meaning that Cost Model Version 2 is used for index selection and operator selection by default.  |

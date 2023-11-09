@@ -173,7 +173,7 @@ Quick access: [Quick start](https://docs.pingcap.com/tidb/v7.2/quick-start-with-
 ### System variables
 
 | Variable name | Change type | Description |
-|--------|------------------------------|------|
+|------------------------------|---------------|---------------------------------------------|
 | [`last_insert_id`](/system-variables.md#last_insert_id) | Modified | Changes the maximum value from `9223372036854775807` to `18446744073709551615` to be consistent with that of MySQL. |
 | [`tidb_enable_non_prepared_plan_cache`](/system-variables.md#tidb_enable_non_prepared_plan_cache) | Modified | Changes the default value from `OFF` to `ON` after further tests, meaning that non-prepared execution plan cache is enabled. |
 | [`tidb_remove_orderby_in_subquery`](/system-variables.md#tidb_remove_orderby_in_subquery-new-in-v610) | Modified | Changes the default value from `OFF` to `ON` after further tests, meaning that the optimizer removes the `ORDER BY` clause in a subquery. |

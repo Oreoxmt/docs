@@ -247,7 +247,7 @@ In v6.2.0-DMR, the key new features and improvements are as follows:
 ### System variables
 
 | Variable name | Change type | Description |
-| --- | --- | --- |
+|------------------------------|---------------|---------------------------------------------|
 | [tidb_enable_new_cost_interface](/system-variables.md#tidb_enable_new_cost_interface-new-in-v620) | Newly added | This variable controls whether to enable the [refactored Cost Model implementation](/cost-model.md#cost-model-version-2). |
 | [tidb_cost_model_version](/system-variables.md#tidb_cost_model_version-new-in-v620) | Newly added | TiDB uses a cost model to choose an index and operator during physical optimization. This variable is used to select the cost model version. TiDB v6.2.0 introduces the Cost Model Version 2, which is more accurate than the previous version in internal tests. |
 | tidb_enable_concurrent_ddl | Newly added | This variable controls whether to allow TiDB to use concurrent DDL statements. DO NOT modify this variable. The risk of disabling this variable is unknown and might corrupt the metadata of the cluster. |

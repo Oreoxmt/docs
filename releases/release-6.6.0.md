@@ -348,7 +348,7 @@ In v6.6.0-DMR, the key new features and improvements are as follows:
 ### System variables
 
 | Variable name  | Change type    | Description |
-|--------|------------------------------|------|
+|------------------------------|---------------|---------------------------------------------|
 | `tidb_enable_amend_pessimistic_txn` | Deleted | Starting from v6.5.0, this variable is deprecated. Starting from v6.6.0, this variable and the `AMEND TRANSACTION` feature are deleted. TiDB will use [meta lock](/metadata-lock.md) to avoid the `Information schema is changed` error. |
 | `tidb_enable_concurrent_ddl` | Deleted | This variable controls whether to allow TiDB to use concurrent DDL statements. When this variable is disabled, TiDB uses the old DDL execution framework, which provides limited support for concurrent DDL execution. Starting from v6.6.0, this variable is deleted and TiDB no longer supports the old DDL execution framework. |
 | `tidb_ttl_job_run_interval` | Deleted | This variable is used to control the scheduling interval of TTL jobs in the background. Starting from v6.6.0, this variable is deleted, because TiDB provides the `TTL_JOB_INTERVAL` attribute for every table to control the TTL runtime, which is more flexible than `tidb_ttl_job_run_interval`. |

@@ -27,7 +27,7 @@ In v5.1, the key new features or improvements are as follows:
 ### System variables
 
 | Variable name   | Change type   | Description   |
-|:----------|:-----------|:-----------|
+|------------------------------|---------------|---------------------------------------------|
 | [`cte_max_recursion_depth`](/system-variables.md#cte_max_recursion_depth)  | Newly added | Controls the maximum recursion depth in Common Table Expressions. |
 | [`init_connect`](/system-variables.md#init_connect)  | Newly added | Controls the initial connection to a TiDB server. |
 | [`tidb_analyze_version`](/system-variables.md#tidb_analyze_version-new-in-v510)  | Newly added | Controls how TiDB collects statistics. The default value of this variable is `2`. This is an experimental feature. |

@@ -226,7 +226,7 @@ In 6.1.0, the key new features or improvements are as follows:
 ### System variables
 
 | Variable name | Change type | Description |
-|---|---|---|
+|------------------------------|---------------|---------------------------------------------|
 | [`tidb_enable_list_partition`](/system-variables.md#tidb_enable_list_partition-new-in-v50) | Modified | The default value is changed from `OFF` to `ON`. |
 | [`tidb_mem_quota_query`](/system-variables.md#tidb_mem_quota_query) | Modified | This variable adds the GLOBAL scope, and the variable value persists to the cluster. |
 | [`tidb_query_log_max_len`](/system-variables.md#tidb_query_log_max_len) | Modified | The variable scope is changed from INSTANCE to GLOBAL. The variable value persists to the cluster, and the value range is changed to `[0, 1073741824]`. |

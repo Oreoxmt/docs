@@ -209,7 +209,7 @@ In v6.3.0-DMR, the key new features and improvements are as follows:
 ### System variables
 
 | Variable name | Change type | Description |
-| --- | --- | --- |
+|------------------------------|---------------|---------------------------------------------|
 | [`default_authentication_plugin`](/system-variables.md#default_authentication_plugin) | Modified | Adds a new option `tidb_sm3_password`. When this variable is set to `tidb_sm3_password`, SM3 is used as the encryption algorithm. |
 | [`sql_require_primary_key`](/system-variables.md#sql_require_primary_key-new-in-v630)   | Newly added  | Controls whether to enforce the requirement that a table has a primary key. After this variable is enabled, attempting to create or alter a table without a primary key will produce an error.  |
 | [`tidb_adaptive_closest_read_threshold`](/system-variables.md#tidb_adaptive_closest_read_threshold-new-in-v630) | Newly added | Controls the threshold at which the TiDB server prefers to send read requests to the replica in the same region as the TiDB server when [`tidb_replica_read`](/system-variables.md#tidb_replica_read-new-in-v40) is set to `closest-adaptive`.  |

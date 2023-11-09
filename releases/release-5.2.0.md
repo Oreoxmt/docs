@@ -31,7 +31,7 @@ In v5.2, the key new features and improvements are as follows:
 ### System variables
 
 | Variable name    |  Change type    |  Description  |
-| :---------- | :----------- | :----------- |
+|------------------------------|---------------|---------------------------------------------|
 | [`default_authentication_plugin`](/system-variables.md#default_authentication_plugin) | Newly added | Sets the authentication method that the server advertises. The default value is `mysql_native_password`.  |
 | [`tidb_enable_auto_increment_in_generated`](/system-variables.md#tidb_enable_auto_increment_in_generated) | Newly added | Determines whether to include the `AUTO_INCREMENT` columns when creating a generated column or an expression index. The default value is `OFF`.  |
 | [`tidb_opt_enable_correlation_adjustment`](/system-variables.md#tidb_opt_enable_correlation_adjustment) | Newly added | Controls whether the optimizer estimates the number of rows based on column order correlation. The default value is `ON`.  |
