@@ -1,6 +1,11 @@
 ---
-title: TiDB 7.2.0 Release Notes
-summary: Learn about the new features, compatibility changes, improvements, and bug fixes in TiDB 7.2.0.
+title: 'TiDB Release Notes: Changes from v7.1.0 to v7.5.0'
+author: PingCAP
+date: 20231123
+abstract: |
+   This document contains the release notes for TiDB [v7.2.0-DMR](https://docs.pingcap.com/tidb/v7.2), [v7.3.0-DMR](https://docs.pingcap.com/tidb/v7.3), [v7.4.0-DMR](https://docs.pingcap.com/tidb/v7.4), and [v7.5.0-LTS](https://docs.pingcap.com/tidb/stable). When you upgrade from v7.1.x to v7.5.0, you can refer to this document for a thorough overview of new features, compatibility changes, improvements, and bug fixes.
+
+   For detailed guidance and additional resources regarding TiDB v7.5.0, see [TiDB Documentation](https://docs.pingcap.com/tidb/stable).
 ---
 
 # TiDB 7.2.0 Release Notes
@@ -294,11 +299,6 @@ We would like to thank the following contributors from the TiDB community:
 - [nyurik](https://github.com/nyurik)
 - [SeigeC](https://github.com/SeigeC)
 - [tangjingyu97](https://github.com/tangjingyu97)
-
----
-title: TiDB 7.3.0 Release Notes
-summary: Learn about the new features, compatibility changes, improvements, and bug fixes in TiDB 7.3.0.
----
 
 # TiDB 7.3.0 Release Notes
 
@@ -595,11 +595,6 @@ We would like to thank the following contributors from the TiDB community:
 - [tisonkun](https://github.com/tisonkun)
 - [xuyifangreeneyes](https://github.com/xuyifangreeneyes)
 - [yumchina](https://github.com/yumchina)
-
----
-title: TiDB 7.4.0 Release Notes
-summary: Learn about the new features, compatibility changes, improvements, and bug fixes in TiDB 7.4.0.
----
 
 # TiDB 7.4.0 Release Notes
 
