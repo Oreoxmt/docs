@@ -1,38 +1,5 @@
 
 <table>
-    <thead>
-      <tr>
-        <th>Category</th>
-        <th>Feature</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td rowspan="2">Scalability and Performance</td>
-        <td>Resource groups support <a href="https://docs.pingcap.com/tidb/v7.2/tidb-resource-control#manage-queries-that-consume-more-resources-than-expected-runaway-queries"> managing runaway queries</a> (experimental)</td>
-        <td>You can now manage query timeout with more granularity, allowing for different behaviors based on query classifications. Queries meeting your specified threshold can be deprioritized or terminated.
-        </td>
-      </tr>
-      <tr>
-        <td>TiFlash supports the <a href="https://docs.pingcap.com/tidb/v7.2/tiflash-pipeline-model">pipeline execution model</a> (experimental)</td>
-        <td>TiFlash supports a pipeline execution model to optimize thread resource control.</td>
-      </tr>
-      <tr>
-        <td rowspan="1">SQL</td>
-        <td>Support a new SQL statement, <a href="https://docs.pingcap.com/tidb/v7.2/sql-statement-import-into">IMPORT INTO</a>, for data import (experimental)</td>
-       <td>To simplify the deployment and maintenance of TiDB Lightning, TiDB introduces a new SQL statement <code>IMPORT INTO</code>, which integrates physical import mode of TiDB Lightning, including remote import from Amazon S3 or Google Cloud Storage (GCS) directly into TiDB.</td>
-      </tr>
-      <tr>
-        <td rowspan="2">DB Operations and Observability</td>
-        <td>DDL supports <a href="https://docs.pingcap.com/tidb/v7.2/ddl-introduction#ddl-related-commands">pause and resume operations</a> (experimental)</td>
-        <td>This new capability lets you temporarily suspend resource-intensive DDL operations, such as index creation, to conserve resources and minimize the impact on online traffic. You can seamlessly resume these operations when ready, without the need to cancel and restart. This feature enhances resource utilization, improves user experience, and streamlines schema changes.</td>
-      </tr>
-    </tbody>
-    </table>
-
-
-<table>
   <thead>
     <tr>
       <th>Category</th>
@@ -43,32 +10,42 @@
   <tbody>
     <tr>
       <td>Scalability and Performance</td>
-      <td>TiDB Lightning supports <a href="https://docs.pingcap.com/tidb/v7.3/partitioned-raft-kv">Partitioned Raft KV</a> (experimental)</td>
-      <td>TiDB Lightning now supports the new Partitioned Raft KV architecture, as part of the near-term GA of the architecture.
-      </td>
+      <td>Support for running multiple <code>ADD INDEX</code> statements in parallel {/* tw@ran-huang */}</td>
+      <td>Different from distributed and parallel DDL jobs, this feature allows for concurrent jobs to run where they were otherwise running synchronously. Where running DDL statements x, y at the same time used to take x-time +y-time, they now take significantly less.</td>
     </tr>
     <tr>
-      <td rowspan="2">Reliability and Availability</td>
-      <td><a href="https://docs.pingcap.com/tidb/v7.3/tidb-lightning-physical-import-mode-usage#conflict-detection">Add automatic conflict detection and resolution on data imports</a></td>
-      <td>The TiDB Lightning Physical Import Mode supports a new version of conflict detection, which implements the semantics of replacing (<code>replace</code>) or ignoring (<code>ignore</code>) conflict data when encountering conflicts. It automatically handles conflict data for you while improving the performance of conflict resolution.</td>
+      <td rowspan="3">Reliability and Availability</td>
+      <td><a href="https://docs.pingcap.com/tidb/v7.5/tidb-global-sort" target="_blank">Global sort</a> optimization {/* tw@ran-huang */}</td>
+      <td>TiDB v7.2 introduced the <a href="https://docs.pingcap.com/tidb/v7.5/tidb-distributed-execution-framework" target="_blank">distributed execution framework</a>. For tasks that take advantage of this framework, v7.4 introduces global sorting to eliminate the unnecessary I/O, CPU, and memory spikes caused from temporarily out of order data during data re-organization tasks. The global sorting will take advantage of external shared object storage (S3 in this first iteration) to store intermediary files during the job, adding flexibility and cost savings. Operations like <code>ADD INDEX</code> and <code>IMPORT INTO</code> will be faster, more resilient, more stable, more flexible, and cost less to run.</td>
     </tr>
     <tr>
-      <td><a href="https://docs.pingcap.com/tidb/v7.3/tidb-resource-control#query-watch-parameters">Manual management of runaway queries </a>(experimental)</td>
-      <td>Queries might take longer than you expect. With the new watch list of resource groups, you can now manage queries more effectively and either deprioritize or kill them. Allowing operators to mark target queries by exact SQL text, SQL digest, or plan digest and deal with the queries at a resource group level, this feature gives you much more control over the potential impact of unexpected large queries on a cluster.</td>
+      <td><a href="https://docs.pingcap.com/tidb/v7.5/tidb-resource-control#manage-background-tasks" target="_blank">Resource control</a> for background tasks (experimental) {/* tw@Oreoxmt */}</td>
+      <td>In v7.1.0, the <a href="https://docs.pingcap.com/tidb/v7.5/tidb-resource-control#use-resource-control-to-achieve-resource-isolation" target="_blank">Resource Control</a> feature was introduced to mitigate resource and storage access interference between workloads. TiDB v7.4.0 applies this control to background tasks as well. In v7.4.0, Resource Control now identifies and manages the resources produced by background tasks, such as auto-analyze, Backup & Restore, bulk load with TiDB Lightning, and online DDL. This will eventually apply to all background tasks.</td>
+    </tr>
+    <tr>
+      <td>Resource groups support <a href="https://docs.pingcap.com/tidb/v7.5/tidb-resource-control#manage-queries-that-consume-more-resources-than-expected-runaway-queries"> managing runaway queries</a> (experimental) {/* tw@hfxsd */}</td>
+      <td><a href="https://docs.pingcap.com/tidb/v7.5/tidb-resource-control" target="_blank">Resource Control</a> is a framework for resource-isolating workloads by Resource Groups, but it makes no calls on how individual queries affect work inside of each group. TiDB v7.2.0 introduces "runaway queries control" to let you control how TiDB identifies and treats these queries per Resource Group. Depending on needs, long running queries might be terminated or throttled, and the queries can be identified by exact SQL text, SQL digests or their plan digests, for better generalization. In v7.3.0, TiDB enables you to proactively watch for known bad queries, similar to a SQL blocklist at the database level.</td>
     </tr>
     <tr>
       <td>SQL</td>
-      <td><a href="https://docs.pingcap.com/tidb/v7.3/optimizer-hints">Enhance operator control over query stability by adding more optimizer hints to the query planner</a></td>
-      <td>Added hints: <code>NO_INDEX_JOIN()</code>, <code>NO_MERGE_JOIN()</code>, <code>NO_INDEX_MERGE_JOIN()</code>, <code>NO_HASH_JOIN()</code>, <code>NO_INDEX_HASH_JOIN()</code>
-      </td>
+      <td>MySQL 8.0 compatibility {/* tw@Oreoxmt */}</td>
+      <td>In MySQL 8.0, the default characterset is utf8mb4, and the default collation of utf8mb4 is <code>utf8mb4_0900_ai_ci</code>. TiDB v7.4.0 adding support for this enhances compatibility with MySQL 8.0 so that migrations and replications from MySQL 8.0 databases with the default collation are now much smoother.</td>
     </tr>
     <tr>
-      <td>DB Operations and Observability</td>
-      <td><a href="https://docs.pingcap.com/tidb/v7.3/sql-statement-show-analyze-status">Show the progress of statistics collection tasks</a></td>
-      <td>Support viewing the progress of <code>ANALYZE</code> tasks using the <code>SHOW ANALYZE STATUS</code> statement or through the <code>mysql.analyze_jobs</code> system table.</td>
+      <td rowspan="3">DB Operations and Observability</td>
+      <td>TiDB Lightning's physical import mode integrated into TiDB with <a href="https://docs.pingcap.com/tidb/v7.5/sql-statement-import-into"><code>IMPORT INTO</code></a> {/* tw@qiancai */}</td>
+      <td>Before v7.2, to import data based on the file system, you needed to install <a href="https://docs.pingcap.com/tidb/v7.5/tidb-lightning-overview">TiDB Lightning</a> and use its physical import mode. Now, the same functionality is integrated into the <code>IMPORT INTO</code> statement so you can use this statement to quickly import data without installing any additional tool. This statement also supports the new <a href="https://docs.pingcap.com/tidb/v7.5/tidb-distributed-execution-framework" target="_blank">distributed execution framework</a> and the <a href="https://docs.pingcap.com/tidb/v7.5/tidb-global-sort" target="_blank">Global sort</a> feature, which improves import efficiency and provides greater stability during large-scale imports.</td>
+    </tr>
+    <tr>
+      <td>Specify<a href="https://docs.pingcap.com/tidb/v7.5/system-variables#tidb_service_scope-new-in-v740" target="_blank"> the respective TiDB nodes</a> to execute the <code>IMPORT INTO</code> and <code>ADD INDEX</code> SQL statements (GA) {/* tw@hfxsd */}</td>
+      <td>You have the flexibility to specify whether to execute <code>IMPORT INTO</code> or <code>ADD INDEX</code> SQL statements on some of the existing TiDB nodes or newly added TiDB nodes. This approach enables resource isolation from the rest of the TiDB nodes, preventing any impact on business operations while ensuring optimal performance for executing the preceding SQL statements. In v7.5.0, this feature becomes generally available (GA).</td>
+    </tr>
+    <tr>
+      <td>DDL supports <a href="https://docs.pingcap.com/tidb/v7.5/ddl-introduction#ddl-related-commands">pause and resume operations</a> {/* tw@ran-huang */}</td>
+      <td>Adding indexes can be big resource consumers and can affect online traffic. Even when throttled in a Resource Group or isolated to labeled nodes, there may still be a need to suspend these jobs in emergencies. As of v7.2, TiDB now natively supports suspending any number of these background jobs at once, freeing up needed resources while avoiding having to cancel and restart the jobs.</td>
     </tr>
   </tbody>
-  </table>
+</table>
 
 <table>
   <thead>
@@ -117,6 +94,77 @@
       <td>DB Operations and Observability</td>
       <td>Specify<a href="https://docs.pingcap.com/tidb/v7.4/system-variables#tidb_service_scope-new-in-v740" target="_blank"> the respective TiDB nodes</a> to execute the <code>IMPORT INTO</code> and <code>ADD INDEX</code> SQL statements (experimental)</td>
       <td>You have the flexibility to specify whether to execute <code>IMPORT INTO</code> or <code>ADD INDEX</code> SQL statements on some of the existing TiDB nodes or newly added TiDB nodes. This approach enables resource isolation from the rest of the TiDB nodes, preventing any impact on business operations while ensuring optimal performance for executing the preceding SQL statements.</td>
+    </tr>
+  </tbody>
+</table>
+
+<table>
+  <thead>
+    <tr>
+      <th>Category</th>
+      <th>Feature</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Scalability and Performance</td>
+      <td>TiDB Lightning supports <a href="https://docs.pingcap.com/tidb/v7.3/partitioned-raft-kv">Partitioned Raft KV</a> (experimental)</td>
+      <td>TiDB Lightning now supports the new Partitioned Raft KV architecture, as part of the near-term GA of the architecture.
+      </td>
+    </tr>
+    <tr>
+      <td rowspan="2">Reliability and Availability</td>
+      <td><a href="https://docs.pingcap.com/tidb/v7.3/tidb-lightning-physical-import-mode-usage#conflict-detection">Add automatic conflict detection and resolution on data imports</a></td>
+      <td>The TiDB Lightning Physical Import Mode supports a new version of conflict detection, which implements the semantics of replacing (<code>replace</code>) or ignoring (<code>ignore</code>) conflict data when encountering conflicts. It automatically handles conflict data for you while improving the performance of conflict resolution.</td>
+    </tr>
+    <tr>
+      <td><a href="https://docs.pingcap.com/tidb/v7.3/tidb-resource-control#query-watch-parameters">Manual management of runaway queries </a>(experimental)</td>
+      <td>Queries might take longer than you expect. With the new watch list of resource groups, you can now manage queries more effectively and either deprioritize or kill them. Allowing operators to mark target queries by exact SQL text, SQL digest, or plan digest and deal with the queries at a resource group level, this feature gives you much more control over the potential impact of unexpected large queries on a cluster.</td>
+    </tr>
+    <tr>
+      <td>SQL</td>
+      <td><a href="https://docs.pingcap.com/tidb/v7.3/optimizer-hints">Enhance operator control over query stability by adding more optimizer hints to the query planner</a></td>
+      <td>Added hints: <code>NO_INDEX_JOIN()</code>, <code>NO_MERGE_JOIN()</code>, <code>NO_INDEX_MERGE_JOIN()</code>, <code>NO_HASH_JOIN()</code>, <code>NO_INDEX_HASH_JOIN()</code>
+      </td>
+    </tr>
+    <tr>
+      <td>DB Operations and Observability</td>
+      <td><a href="https://docs.pingcap.com/tidb/v7.3/sql-statement-show-analyze-status">Show the progress of statistics collection tasks</a></td>
+      <td>Support viewing the progress of <code>ANALYZE</code> tasks using the <code>SHOW ANALYZE STATUS</code> statement or through the <code>mysql.analyze_jobs</code> system table.</td>
+    </tr>
+  </tbody>
+  </table>
+
+
+<table>
+  <thead>
+    <tr>
+      <th>Category</th>
+      <th>Feature</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td rowspan="2">Scalability and Performance</td>
+      <td>Resource groups support <a href="https://docs.pingcap.com/tidb/v7.2/tidb-resource-control#manage-queries-that-consume-more-resources-than-expected-runaway-queries"> managing runaway queries</a> (experimental)</td>
+      <td>You can now manage query timeout with more granularity, allowing for different behaviors based on query classifications. Queries meeting your specified threshold can be deprioritized or terminated.
+      </td>
+    </tr>
+    <tr>
+      <td>TiFlash supports the <a href="https://docs.pingcap.com/tidb/v7.2/tiflash-pipeline-model">pipeline execution model</a> (experimental)</td>
+      <td>TiFlash supports a pipeline execution model to optimize thread resource control.</td>
+    </tr>
+    <tr>
+      <td rowspan="1">SQL</td>
+      <td>Support a new SQL statement, <a href="https://docs.pingcap.com/tidb/v7.2/sql-statement-import-into">IMPORT INTO</a>, for data import (experimental)</td>
+      <td>To simplify the deployment and maintenance of TiDB Lightning, TiDB introduces a new SQL statement <code>IMPORT INTO</code>, which integrates physical import mode of TiDB Lightning, including remote import from Amazon S3 or Google Cloud Storage (GCS) directly into TiDB.</td>
+    </tr>
+    <tr>
+      <td rowspan="2">DB Operations and Observability</td>
+      <td>DDL supports <a href="https://docs.pingcap.com/tidb/v7.2/ddl-introduction#ddl-related-commands">pause and resume operations</a> (experimental)</td>
+      <td>This new capability lets you temporarily suspend resource-intensive DDL operations, such as index creation, to conserve resources and minimize the impact on online traffic. You can seamlessly resume these operations when ready, without the need to cancel and restart. This feature enhances resource utilization, improves user experience, and streamlines schema changes.</td>
     </tr>
   </tbody>
   </table>
