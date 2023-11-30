@@ -1,16 +1,16 @@
 ---
 title: 'TiDB Release Notes: Changes from v7.2.0 to v7.5.0'
 author: PingCAP
-date: 20231123
+date: 20231201
 abstract: |
-   This document contains the release notes for TiDB [v7.2.0-DMR](https://docs.pingcap.com/tidb/v7.2), [v7.3.0-DMR](https://docs.pingcap.com/tidb/v7.3), [v7.4.0-DMR](https://docs.pingcap.com/tidb/v7.4), and [v7.5.0-LTS](https://docs.pingcap.com/tidb/stable). When you upgrade from v7.1.x to v7.5.0, you can refer to this document for a thorough overview of new features, compatibility changes, improvements, and bug fixes.
+   This document contains the release notes for TiDB [v7.2.0-DMR](https://docs.pingcap.com/tidb/v7.2), [v7.3.0-DMR](https://docs.pingcap.com/tidb/v7.3), [v7.4.0-DMR](https://docs.pingcap.com/tidb/v7.4), and [v7.5.0-LTS](https://docs.pingcap.com/tidb/v7.5). When you upgrade from v7.1.x to v7.5.0, you can refer to this document for a thorough overview of new features, compatibility changes, improvements, and bug fixes.
 
    For detailed guidance and additional resources about TiDB v7.5.0, see [TiDB v7.5 documentation](https://docs.pingcap.com/tidb/v7.5).
 ---
 
 # TiDB 7.5.0 Release Notes
 
-Release date: xx xx, 2023
+Release date: December 1, 2023
 
 TiDB version: 7.5.0
 
@@ -18,35 +18,39 @@ Quick access: [Quick start](https://docs.pingcap.com/tidb/v7.5/quick-start-with-
 
 TiDB 7.5.0 is a Long-Term Support Release (LTS).
 
-Compared with the previous LTS 7.1.0, 7.5.0 includes new features, improvements, and bug fixes released in [7.2.0-DMR](https://docs.pingcap.com/tidb/v7.5/release-7.2.0), [7.3.0-DMR](https://docs.pingcap.com/tidb/v7.5/release-7.3.0), and [7.4.0-DMR](https://docs.pingcap.com/tidb/v7.5/release-7.4.0). The following table lists some highlights from 7.2.0 to 7.5.0:
+Compared with the previous LTS 7.1.0, 7.5.0 includes new features, improvements, and bug fixes released in [7.2.0-DMR](/releases/release-7.2.0.md), [7.3.0-DMR](/releases/release-7.3.0.md), and [7.4.0-DMR](/releases/release-7.4.0.md). When you upgrade from 7.1.x to 7.5.0, you can download the [TiDB Release Notes PDF](https://download.pingcap.org/tidb-v7.2-to-v7.5-en-release-notes.pdf) to view all release notes between the two LTS versions. The following table lists some highlights from 7.2.0 to 7.5.0:
 
 ## Feature details
 
 ### Scalability
 
-* Support designating and isolating TiDB nodes to execute `ADD INDEX` or `IMPORT INTO` tasks when the distributed execution framework is enabled [#46258](https://github.com/pingcap/tidb/issues/46258) @[ywqzzy](https://github.com/ywqzzy)<!--**tw@hfxsd** 1581-->
+* Support designating and isolating TiDB nodes to distributedly execute `ADD INDEX` or `IMPORT INTO` tasks when the distributed execution framework is enabled [#46258](https://github.com/pingcap/tidb/issues/46258) @[ywqzzy](https://github.com/ywqzzy)
 
-    Executing `ADD INDEX` or `IMPORT INTO` tasks in parallel in a resource-intensive cluster can consume a large amount of TiDB node resources, which can lead to cluster performance degradation. To avoid performance impact on existing services, v7.4.0 introduces the system variable [`tidb_service_scope`](https://docs.pingcap.com/tidb/v7.5/system-variables#tidb_service_scope-new-in-v740) as an experimental feature to control the service scope of each TiDB node under the [TiDB Backend Task Distributed Execution Framework](https://docs.pingcap.com/tidb/v7.5/tidb-distributed-execution-framework). You can select several existing TiDB nodes or set the TiDB service scope for new TiDB nodes, and all parallel `ADD INDEX` and `IMPORT INTO` tasks only run on these nodes. In v7.5.0, this feature becomes generally available (GA).
+    Executing `ADD INDEX` or `IMPORT INTO` tasks in parallel in a resource-intensive cluster can consume a large amount of TiDB node resources, which can lead to cluster performance degradation. To avoid performance impact on existing services, v7.4.0 introduces the system variable [`tidb_service_scope`](/system-variables.md#tidb_service_scope-new-in-v740) as an experimental feature to control the service scope of each TiDB node under the [TiDB backend task distributed execution framework](/tidb-distributed-execution-framework.md). You can select several existing TiDB nodes or set the TiDB service scope for new TiDB nodes, and all distributedly executed `ADD INDEX` and `IMPORT INTO` tasks only run on these nodes. In v7.5.0, this feature becomes generally available (GA).
 
-    For more information, see [documentation](https://docs.pingcap.com/tidb/v7.5/system-variables#tidb_service_scope-new-in-v740).
+    For more information, see [documentation](/system-variables.md#tidb_service_scope-new-in-v740).
 
 ### Performance
 
-* The TiDB backend task distributed execution framework becomes generally available (GA). The cloud storage-based global sort capability also becomes GA, improving the performance and stability of `ADD INDEX` and `IMPORT INTO` tasks in parallel execution [#45719](https://github.com/pingcap/tidb/issues/45719) @[wjhuang2016](https://github.com/wjhuang2016) <!--**tw@ran-huang** 1580-->
+* The TiDB backend task distributed execution framework becomes generally available (GA), improving the performance and stability of `ADD INDEX` and `IMPORT INTO` tasks in parallel execution [#45719](https://github.com/pingcap/tidb/issues/45719) @[wjhuang2016](https://github.com/wjhuang2016)
 
-    Before v7.4.0, when executing tasks like `ADD INDEX` or `IMPORT INTO` in the distributed parallel execution framework, each TiDB node needs to allocate a significant amount of local disk space for sorting encoded index KV pairs and table data KV pairs. However, due to the lack of global sorting capability, there might be overlapping data between different TiDB nodes and within each individual node during the process. As a result, TiKV has to constantly perform compaction operations while importing these KV pairs into its storage engine, which impacts the performance and stability of `ADD INDEX` and `IMPORT INTO`.
+    The backend task distributed execution framework introduced in v6.6.0 has become GA. In versions before TiDB v7.1.0, only one TiDB node can execute DDL tasks at the same time. Starting from v7.1.0, multiple TiDB nodes can execute the same DDL task in parallel under the backend task distributed execution framework. Starting from v7.2.0, the backend task distributed execution framework supports multiple TiDB nodes to execute the same `IMPORT INTO` task in parallel, thereby better utilizing the resources of the TiDB cluster and significantly improving the performance of DDL and `IMPORT INTO` tasks. In addition, you can also increase TiDB nodes to linearly improve the performance of these tasks.
 
-    In v7.4.0, TiDB introduces the [Global Sort](https://docs.pingcap.com/tidb/v7.5/tidb-global-sort) feature. Instead of writing the encoded data locally and sorting it there, the data is now written to cloud storage for global sorting. Once sorted, both the indexed data and table data are imported into TiKV in parallel, thereby improving performance and stability.
+    To use the backend task distributed execution framework, set [`tidb_enable_dist_task`](/system-variables.md#tidb_enable_dist_task-new-in-v710) value to `ON`.
 
-    For more information, see [documentation](https://docs.pingcap.com/tidb/v7.5/tidb-global-sort).
+    ```sql
+    SET GLOBAL tidb_enable_dist_task = ON;
+    ```
 
-* Improve the performance of adding multiple indexes in a single SQL statement [#41602](https://github.com/pingcap/tidb/issues/41602) @[tangenta](https://github.com/tangenta) <!--**tw@ran-huang** 1582-->
+    For more information, see [documentation](/tidb-global-sort.md).
 
-    Before v7.5.0, when you add multiple indexes (`ADD INDEX`) in a single SQL statement, the performance was similar to adding multiple indexes using separate SQL statements. Starting from v7.5.0, the performance of adding multiple indexes in a single SQL statement is significantly improved, improving XX, which greatly reduces the time required for adding indexes.
+* Improve the performance of adding multiple indexes in a single SQL statement [#41602](https://github.com/pingcap/tidb/issues/41602) @[tangenta](https://github.com/tangenta)
+
+    Before v7.5.0, when you add multiple indexes (`ADD INDEX`) in a single SQL statement, the performance was similar to adding multiple indexes using separate SQL statements. Starting from v7.5.0, the performance of adding multiple indexes in a single SQL statement is significantly improved. Especially in scenarios with wide tables, internal test data shows that performance can be improved by up to 94%.
 
 ### DB operations
 
-* DDL jobs support pause and resume operations (GA) [#18015](https://github.com/pingcap/tidb/issues/18015) @[godouxm](https://github.com/godouxm) <!--**tw@ran-huang** 1611-->
+* DDL jobs support pause and resume operations (GA) [#18015](https://github.com/pingcap/tidb/issues/18015) @[godouxm](https://github.com/godouxm)
 
     The pause and resume operations for DDL jobs introduced in v7.2.0 become generally available (GA). These operations let you pause resource-intensive DDL jobs (such as creating indexes) to save resources and minimize the impact on online traffic. When resources permit, you can seamlessly resume DDL jobs without canceling and restarting them. This feature improves resource utilization, enhances user experience, and simplifies the schema change process.
 
@@ -57,39 +61,45 @@ Compared with the previous LTS 7.1.0, 7.5.0 includes new features, improvements,
     ADMIN RESUME DDL JOBS 1,2;
     ```
 
-    For more information, see [documentation](https://docs.pingcap.com/tidb/v7.5/ddl-introduction#ddl-related-commands).
+    For more information, see [documentation](/ddl-introduction.md#ddl-related-commands).
 
-* BR supports backing up and restoring statistics [#48008](https://github.com/pingcap/tidb/issues/48008) @[Leavrth](https://github.com/Leavrth) <!--**tw@hfxsd** 1437-->
+* BR supports backing up and restoring statistics [#48008](https://github.com/pingcap/tidb/issues/48008) @[Leavrth](https://github.com/Leavrth)
 
-    Starting from TiDB v7.5.0, the `br` command-line tool introduces the `--ignore-stats` parameter to back up and restore database statistics. When you set this parameter to `false`, the `br` command-line tool supports backing up and restoring statistics of columns, indexes, and tables. In this case, you do not need to manually run the statistics collection task for the TiDB database restored from the backup, or wait for the completion of automatic collection tasks. This feature simplifies database maintenance work and improves query performance.
+    Starting from TiDB v7.5.0, the br command-line tool introduces the `--ignore-stats` parameter to back up and restore database statistics. When you set this parameter to `false`, the br command-line tool supports backing up and restoring statistics of columns, indexes, and tables. In this case, you do not need to manually run the statistics collection task for the TiDB database restored from the backup, or wait for the completion of automatic collection tasks. This feature simplifies database maintenance work and improves query performance.
 
-    For more information, see [documentation](https://docs.pingcap.com/tidb/v7.5/br-snapshot-manual#back-up-statistics).
+    For more information, see [documentation](/br/br-snapshot-manual.md#back-up-statistics).
+
+### Observability
+
+* TiDB Dashboard supports heap profiling for TiKV [#15927](https://github.com/tikv/tikv/issues/15927) @[Connor1996](https://github.com/Connor1996)
+
+    Previously, addressing TiKV OOM or high memory usage issues typically required manual execution of `jeprof` to generate a heap profile in the instance environment. Starting from v7.5.0, TiKV enables remote processing of heap profiles. You can now directly access the flame graph and call graph of heap profile. This feature provides the same simple and easy-to-use experience as Go heap profiling.
+
+    For more information, see [documentation](/dashboard/dashboard-profiling.md).
 
 ### Data migration
 
-* Support the `IMPORT INTO` SQL statement (GA) [#46704](https://github.com/pingcap/tidb/issues/46704) @[D3Hunter](https://github.com/D3Hunter)<!--**tw@qiancai** 1579-->
+* Support the `IMPORT INTO` SQL statement (GA) [#46704](https://github.com/pingcap/tidb/issues/46704) @[D3Hunter](https://github.com/D3Hunter)
 
-    In v7.5.0, the `IMPORT INTO` SQL statement becomes generally available (GA). This statement integrates the [Physical Import Mode](https://docs.pingcap.com/tidb/v7.5/tidb-lightning-physical-import-mode) capability of TiDB Lightning and allows you to quickly import data in formats such as CSV, SQL, and PARQUET into an empty table in TiDB. This import method eliminates the need for a separate deployment and management of TiDB Lightning, thereby reducing the complexity of data import and greatly improving import efficiency.
+    In v7.5.0, the `IMPORT INTO` SQL statement becomes generally available (GA). This statement integrates the [Physical Import Mode](/tidb-lightning/tidb-lightning-physical-import-mode.md) capability of TiDB Lightning and allows you to quickly import data in formats such as CSV, SQL, and PARQUET into an empty table in TiDB. This import method eliminates the need for a separate deployment and management of TiDB Lightning, thereby reducing the complexity of data import and greatly improving import efficiency.
 
-    In addition, you can add the `CLOUD_STORAGE_URI` option in the `IMPORT INTO` statement to enable the [Global Sort](https://docs.pingcap.com/tidb/v7.5/tidb-global-sort) feature, which helps boost import performance and stability. In the `CLOUD_STORAGE_URI` option, you can specify a cloud storage address for the encoded data.
+    For more information, see [documentation](/sql-statements/sql-statement-import-into.md).
 
-    For more information, see [documentation](https://docs.pingcap.com/tidb/v7.5/sql-statement-import-into).
-
-* Data Migration (DM) supports blocking incompatible (data-consistency-corrupting) DDL changes [#9692](https://github.com/pingcap/tiflow/issues/9692) @[GMHDBJD](https://github.com/GMHDBJD) <!--**tw@hfxsd** 1523-->
+* Data Migration (DM) supports blocking incompatible (data-consistency-corrupting) DDL changes [#9692](https://github.com/pingcap/tiflow/issues/9692) @[GMHDBJD](https://github.com/GMHDBJD)
 
     Before v7.5.0, the DM Binlog Filter feature can only migrate or filter specified events, and the granularity is relatively coarse. For example, it can only filter large granularity of DDL events such as `ALTER`. This method is limited in some scenarios. For example, the application allows `ADD COLUMN` but not `DROP COLUMN`, but they are both filtered by `ALTER` events in the earlier DM versions.
 
     To address such issues, v7.5.0 refines the granularity of the supported DDL events, such as support filtering `MODIFY COLUMN` (modify the column data type), `DROP COLUMN`, and other fine-grained DDL events that lead to data loss, truncation of data, and loss of precision. You can configure it as needed. This feature also supports blocking incompatible DDL changes and reporting errors for such changes, so that you can intervene manually in time to avoid impacting downstream application data.
 
-    For more information, see [documentation](https://docs.pingcap.com/tidb/v7.5/dm-binlog-event-filter#parameter-descriptions).
+    For more information, see [documentation](/dm/dm-binlog-event-filter.md#parameter-descriptions).
 
-* Support real-time checkpoint updates for continuous data validation [#8463](https://github.com/pingcap/tiflow/issues/8463) @[lichunzhu](https://github.com/lichunzhu) <!--**tw@ran-huang** 1496-->
+* Support real-time checkpoint updates for continuous data validation [#8463](https://github.com/pingcap/tiflow/issues/8463) @[lichunzhu](https://github.com/lichunzhu)
 
-    Before v7.5.0, the [continuous data validation feature](https://docs.pingcap.com/tidb/v7.5/dm-continuous-data-validation) ensures the data consistency during replication from DM to downstream. This serves as the basis for cutting over business traffic from the upstream database to TiDB. However, due to various factors such as replication delay and waiting for re-validation of inconsistent data, the continuous validation checkpoint must be refreshed every few minutes. This is unacceptable for some business scenarios where the cutover time is limited to tens of seconds.
+    Before v7.5.0, the [continuous data validation feature](/dm/dm-continuous-data-validation.md) ensures the data consistency during replication from DM to downstream. This serves as the basis for cutting over business traffic from the upstream database to TiDB. However, due to various factors such as replication delay and waiting for re-validation of inconsistent data, the continuous validation checkpoint must be refreshed every few minutes. This is unacceptable for some business scenarios where the cutover time is limited to tens of seconds.
 
     With the introduction of real-time updating of checkpoint for continuous data validation, you can now provide the binlog position from the upstream database. Once the continuous validation program detects this binlog position in memory, it immediately refreshes the checkpoint instead of refreshing it every few minutes. Therefore, you can quickly perform cut-off operations based on this immediately updated checkpoint.
 
-    For more information, see [documentation](https://docs.pingcap.com/tidb/v7.5/dm-continuous-data-validation#set-the-cutover-point-for-continuous-data-validation).
+    For more information, see [documentation](/dm/dm-continuous-data-validation.md#set-the-cutover-point-for-continuous-data-validation).
 
 ## Compatibility changes
 
@@ -101,30 +111,34 @@ Compared with the previous LTS 7.1.0, 7.5.0 includes new features, improvements,
 
 | Variable name  | Change type    |  Description |
 |--------|------------------------------|------|
-| [`tidb_enable_fast_analyze`](https://docs.pingcap.com/tidb/v7.5/system-variables#tidb_enable_fast_analyze) | Deprecated | Controls whether to enable the statistics `Fast Analyze` feature. This feature is deprecated in v7.5.0. |
-| [`tidb_analyze_partition_concurrency`](https://docs.pingcap.com/tidb/v7.5/system-variables#tidb_analyze_partition_concurrency) |  Modified | Changes the default value from `1` to `2` after further tests. |
-| [`tidb_build_stats_concurrency`](https://docs.pingcap.com/tidb/v7.5/system-variables#tidb_build_stats_concurrency) | Modified | Changes the default value from `4` to `2` after further tests. |
-| [`tidb_merge_partition_stats_concurrency`](https://docs.pingcap.com/tidb/v7.5/system-variables#tidb_merge_partition_stats_concurrency)    |  Modified | This system variable takes effect starting from v7.5.0. It specifies the concurrency of merging statistics for a partitioned table when TiDB analyzes the partitioned table. |
-| [`tidb_build_sampling_stats_concurrency`](https://docs.pingcap.com/tidb/v7.5/system-variables#tidb_build_sampling_stats_concurrency-new-in-v750) | Newly added | Controls the sampling concurrency of the `ANALYZE` process. |
-| [`tidb_enable_async_merge_global_stats`](https://docs.pingcap.com/tidb/v7.5/system-variables#tidb_enable_async_merge_global_stats-new-in-v750) | Newly added | This variable is used by TiDB to merge statistics asynchronously to avoid OOM issues. |
-| [`tidb_gogc_tuner_max_value`](https://docs.pingcap.com/tidb/v7.5/system-variables#tidb_gogc_tuner_max_value-new-in-v750) | Newly added | Controls the maximum value of GOGC that the GOGC Tuner can adjust. |
-| [`tidb_gogc_tuner_min_value`](https://docs.pingcap.com/tidb/v7.5/system-variables#tidb_gogc_tuner_min_value-new-in-v750) | Newly added | Controls the minimum value of GOGC that the GOGC Tuner can adjust.|
+| [`tidb_enable_fast_analyze`](/system-variables.md#tidb_enable_fast_analyze) | Deprecated | Controls whether to enable the statistics `Fast Analyze` feature. This feature is deprecated in v7.5.0. |
+| [`tidb_analyze_partition_concurrency`](/system-variables.md#tidb_analyze_partition_concurrency) |  Modified | Changes the default value from `1` to `2` after further tests. |
+| [`tidb_build_stats_concurrency`](/system-variables.md#tidb_build_stats_concurrency) | Modified | Changes the default value from `4` to `2` after further tests. |
+| [`tidb_merge_partition_stats_concurrency`](/system-variables.md#tidb_merge_partition_stats_concurrency)    |  Modified | This system variable takes effect starting from v7.5.0. It specifies the concurrency of merging statistics for a partitioned table when TiDB analyzes the partitioned table. |
+| [`tidb_build_sampling_stats_concurrency`](/system-variables.md#tidb_build_sampling_stats_concurrency-new-in-v750) | Newly added | Controls the sampling concurrency of the `ANALYZE` process. |
+| [`tidb_enable_async_merge_global_stats`](/system-variables.md#tidb_enable_async_merge_global_stats-new-in-v750) | Newly added | This variable is used by TiDB to merge statistics asynchronously to avoid OOM issues. |
+| [`tidb_gogc_tuner_max_value`](/system-variables.md#tidb_gogc_tuner_max_value-new-in-v750) | Newly added | Controls the maximum value of GOGC that the GOGC Tuner can adjust. |
+| [`tidb_gogc_tuner_min_value`](/system-variables.md#tidb_gogc_tuner_min_value-new-in-v750) | Newly added | Controls the minimum value of GOGC that the GOGC Tuner can adjust.|
 
 ### Configuration file parameters
 
 | Configuration file | Configuration parameter | Change type | Description |
 | -------- | -------- | -------- | -------- |
-| BR | [`--ignore-stats`](https://docs.pingcap.com/tidb/v7.5/br-snapshot-manual#back-up-statistics) | Newly added | Controls whether to back up and restore database statistics. When you set this parameter to `false`, the br command-line tool supports backing up and restoring statistics of columns, indexes, and tables. |
-| TiCDC | [`sink.column-selectors`](https://docs.pingcap.com/tidb/v7.5/ticdc-changefeed-config) | Newly added | Controls the specified columns of data change events that TiCDC sends to Kafka when dispatching incremental data. |
-| TiCDC | [`sink.dispatchers.partition`](https://docs.pingcap.com/tidb/v7.5/ticdc-changefeed-config) | Modified | Controls how TiCDC dispatches incremental data to Kafka partitions. v7.5.0 introduces a new value option `columns`, which uses the explicitly specified column values to calculate the partition number. |
-| TiCDC | [`sql-mode`](https://docs.pingcap.com/tidb/v7.5/ticdc-changefeed-config) | Newly added | Specifies the SQL mode used by TiCDC when parsing DDL statements. The default value is the same as the default SQL mode of TiDB. |
+| TiKV | [`raftstore.region-compact-min-redundant-rows`](/tikv-configuration-file.md#region-compact-min-redundant-rows-new-in-v710) | Modified | Sets the number of redundant MVCC rows required to trigger RocksDB compaction. Starting from v7.5.0, this configuration item takes effect for the `"raft-kv"` storage engine. |
+| TiKV | [`raftstore.region-compact-redundant-rows-percent`](/tikv-configuration-file.md#region-compact-redundant-rows-percent-new-in-v710) | Modified | Sets the percentage of redundant MVCC rows required to trigger RocksDB compaction. Starting from v7.5.0, this configuration item takes effect for the `"raft-kv"` storage engine. |
+| TiKV | [`raftstore.evict-cache-on-memory-ratio`](/tikv-configuration-file.md#evict-cache-on-memory-ratio-new-in-v750) | Newly added | When the memory usage of TiKV exceeds 90% of the system available memory, and the memory occupied by Raft entry cache exceeds the `evict-cache-on-memory-ratio` of used memory, TiKV evicts the Raft entry cache. |
+| TiKV | [`memory.enable-heap-profiling`](/tikv-configuration-file.md#enable-heap-profiling-new-in-v750) | Newly added | Controls whether to enable Heap Profiling to track the memory usage of TiKV. |
+| TiKV | [`memory.profiling-sample-per-bytes`](/tikv-configuration-file.md#profiling-sample-per-bytes-new-in-v750) | Newly added | Specifies the amount of data sampled by Heap Profiling each time, rounding up to the nearest power of 2. |
+| BR | [`--ignore-stats`](/br/br-snapshot-manual.md#back-up-statistics) | Newly added | Controls whether to back up and restore database statistics. When you set this parameter to `false`, the br command-line tool supports backing up and restoring statistics of columns, indexes, and tables. |
+| TiCDC | [`case-sensitive`](/ticdc/ticdc-changefeed-config.md) | Modified | Changes the default value from `true` to `false` after further tests, which means that the table names and database names in the TiCDC configuration file are case-insensitive by default. |
+| TiCDC | [`sink.dispatchers.partition`](/ticdc/ticdc-changefeed-config.md) | Modified | Controls how TiCDC dispatches incremental data to Kafka partitions. v7.5.0 introduces a new value option `columns`, which uses the explicitly specified column values to calculate the partition number. |
+| TiCDC | [`sink.column-selectors`](/ticdc/ticdc-changefeed-config.md) | Newly added | Controls the specified columns of data change events that TiCDC sends to Kafka when dispatching incremental data. |
+| TiCDC | [`sql-mode`](/ticdc/ticdc-changefeed-config.md) | Newly added | Specifies the SQL mode used by TiCDC when parsing DDL statements. The default value is the same as the default SQL mode of TiDB. |
 | TiDB Lightning | `--importer` | Deleted | Specifies the address of TiKV-importer, which is deprecated in v7.5.0. |
-
-### Others
 
 ## Offline package changes
 
-Starting from v7.5.0, the following contents are removed from the `TiDB-community-toolkit` [binary package](https://docs.pingcap.com/tidb/v7.5/binary-package):<!--**tw@Oreoxmt** 1593+1594 -->
+Starting from v7.5.0, the following contents are removed from the `TiDB-community-toolkit` [binary package](/binary-package.md):
 
 - `tikv-importer-{version}-linux-{arch}.tar.gz`
 - `mydumper`
@@ -133,114 +147,99 @@ Starting from v7.5.0, the following contents are removed from the `TiDB-communit
 
 ## Deprecated features
 
-* [Mydumper](https://docs.pingcap.com/tidb/v4.0/mydumper-overview) is deprecated in v7.5.0 and most of its features have been replaced by [Dumpling](https://docs.pingcap.com/tidb/v7.5/dumpling-overview). It is strongly recommended that you use Dumpling instead of Mydumper.<!--**tw@Oreoxmt** 1593-->
+* [Mydumper](https://docs.pingcap.com/tidb/v4.0/mydumper-overview) is deprecated in v7.5.0 and most of its features have been replaced by [Dumpling](/dumpling-overview.md). It is strongly recommended that you use Dumpling instead of Mydumper.
 
-* TiKV-importer is deprecated in v7.5.0. It is strongly recommended that you use the [Physical Import Mode of TiDB Lightning](https://docs.pingcap.com/tidb/v7.5/tidb-lightning-physical-import-mode) as an alternative.<!--**tw@Oreoxmt** 1594-->
+* TiKV-importer is deprecated in v7.5.0. It is strongly recommended that you use the [Physical Import Mode of TiDB Lightning](/tidb-lightning/tidb-lightning-physical-import-mode.md) as an alternative.
 
-* Starting from TiDB v7.5.0, technical support for the data replication feature of [TiDB Binlog](https://docs.pingcap.com/tidb/v7.5/tidb-binlog-overview) is no longer provided. It is strongly recommended to use [TiCDC](https://docs.pingcap.com/tidb/v7.5/ticdc-overview) as an alternative solution for data replication. Although TiDB Binlog v7.5.0 still supports the Point-in-Time Recovery (PITR) scenario, this component will be completely deprecated in future versions. It is recommended to use [PITR](https://docs.pingcap.com/tidb/v7.5/br-pitr-guide) as an alternative solution for data recovery.<!--**tw@Oreoxmt** 1575-->
+* Starting from TiDB v7.5.0, technical support for the data replication feature of [TiDB Binlog](/tidb-binlog/tidb-binlog-overview.md) is no longer provided. It is strongly recommended to use [TiCDC](/ticdc/ticdc-overview.md) as an alternative solution for data replication. Although TiDB Binlog v7.5.0 still supports the Point-in-Time Recovery (PITR) scenario, this component will be completely deprecated in future versions. It is recommended to use [PITR](/br/br-pitr-guide.md) as an alternative solution for data recovery.
 
-* The [`Fast Analyze`](https://docs.pingcap.com/tidb/v7.4/system-variables#tidb_enable_fast_analyze) feature (experimental) for statistics is deprecated in v7.5.0.<!--**tw@Oreoxmt** -->
+* The [`Fast Analyze`](/system-variables.md#tidb_enable_fast_analyze) feature (experimental) for statistics is deprecated in v7.5.0.
 
-* The [incremental collection](https://docs.pingcap.com/tidb/v7.4/statistics#incremental-collection) feature (experimental) for statistics is deprecated in v7.5.0.<!--**tw@Oreoxmt** -->
+* The [incremental collection](https://docs.pingcap.com/tidb/v7.4/statistics#incremental-collection) feature (experimental) for statistics is deprecated in v7.5.0.
 
 ## Improvements
 
 + TiDB
 
-    - Optimize the concurrency model of merging GlobalStats: introduce [`tidb_enable_async_merge_global_stats`](https://docs.pingcap.com/tidb/v7.5/system-variables#tidb_enable_async_merge_global_stats-new-in-v750) to enable simultaneous loading and merging of statistics, which speeds up the generation of GlobalStats on partitioned tables. Optimize the memory usage of merging GlobalStats to avoid OOM and reduce memory allocations. [#47219](https://github.com/pingcap/tidb/issues/47219) @[hawkingrei](https://github.com/hawkingrei) <!--**tw@hfxsd** -->
-    - Optimize the `ANALYZE` process: introduce [`tidb_build_sampling_stats_concurrency`](https://docs.pingcap.com/tidb/v7.5/system-variables#tidb_build_sampling_stats_concurrency-new-in-v750) to better control the `ANALYZE` concurrency to reduce resource consumption. Optimize the memory usage of `ANALYZE` to reduce memory allocation and avoid frequent GC by reusing some intermediate results. [#47275](https://github.com/pingcap/tidb/issues/47275) @[hawkingrei](https://github.com/hawkingrei) <!--**tw@hfxsd** -->
-    - Optimize the use of placement policies: support configuring the range of a policy to global and improve the syntax support for common scenarios [#45384](https://github.com/pingcap/tidb/issues/45384) @[nolouch](https://github.com/nolouch) <!--**tw@qiancai** -->
+    - Optimize the concurrency model of merging GlobalStats: introduce [`tidb_enable_async_merge_global_stats`](/system-variables.md#tidb_enable_async_merge_global_stats-new-in-v750) to enable simultaneous loading and merging of statistics, which speeds up the generation of GlobalStats on partitioned tables. Optimize the memory usage of merging GlobalStats to avoid OOM and reduce memory allocations. [#47219](https://github.com/pingcap/tidb/issues/47219) @[hawkingrei](https://github.com/hawkingrei)
+    - Optimize the `ANALYZE` process: introduce [`tidb_build_sampling_stats_concurrency`](/system-variables.md#tidb_build_sampling_stats_concurrency-new-in-v750) to better control the `ANALYZE` concurrency to reduce resource consumption. Optimize the memory usage of `ANALYZE` to reduce memory allocation and avoid frequent GC by reusing some intermediate results. [#47275](https://github.com/pingcap/tidb/issues/47275) @[hawkingrei](https://github.com/hawkingrei)
+    - Optimize the use of placement policies: support configuring the range of a policy to global and improve the syntax support for common scenarios. [#45384](https://github.com/pingcap/tidb/issues/45384) @[nolouch](https://github.com/nolouch)
+    - Improve the performance of adding indexes with `tidb_ddl_enable_fast_reorg` enabled. In internal tests, v7.5.0 improves the performance by up to 62.5% compared with v6.5.0. [#47757](https://github.com/pingcap/tidb/issues/47757) @[tangenta](https://github.com/tangenta)
 
 + TiKV
 
-    - note [#issue](链接) @[贡献者 GitHub ID](链接)
-    - note [#issue](链接) @[贡献者 GitHub ID](链接)
+    - Avoid holding mutex when writing Titan manifest files to prevent affecting other threads [#15351](https://github.com/tikv/tikv/issues/15351) @[Connor1996](https://github.com/Connor1996)
 
 + PD
 
-    - note [#issue](链接) @[贡献者 GitHub ID](链接)
-    - note [#issue](链接) @[贡献者 GitHub ID](链接)
-
-+ TiFlash
-
-    - note [#issue](链接) @[贡献者 GitHub ID](链接)
-    - note [#issue](链接) @[贡献者 GitHub ID](链接)
+    - Improve the stability and usability of the `evict-slow-trend` scheduler [#7156](https://github.com/tikv/pd/issues/7156) @[LykxSassinato](https://github.com/LykxSassinator)
 
 + Tools
 
     + Backup & Restore (BR)
 
-        - note [#issue](链接) @[贡献者 GitHub ID](链接)
-        - note [#issue](链接) @[贡献者 GitHub ID](链接)
-
-    + TiCDC
-
-        - note [#issue](链接) @[贡献者 GitHub ID](链接)
-        - note [#issue](链接) @[贡献者 GitHub ID](链接)
-
-    + TiDB Data Migration (DM)
-
-        - note [#issue](链接) @[贡献者 GitHub ID](链接)
-        - note [#issue](链接) @[贡献者 GitHub ID](链接)
-
-    + TiDB Lightning
-
-        - note [#issue](链接) @[贡献者 GitHub ID](链接)
-        - note [#issue](链接) @[贡献者 GitHub ID](链接)
-
-    + TiUP
-
-        - note [#issue](链接) @[贡献者 GitHub ID](链接)
-        - note [#issue](链接) @[贡献者 GitHub ID](链接)
+        - Add a new inter-table backup parameter `table-concurrency` for snapshot backups. This parameter is used to control the inter-table concurrency of meta information such as statistics backup and data validation [#48571](https://github.com/pingcap/tidb/issues/48571) @[3pointer](https://github.com/3pointer)
+        - During restoring a snapshot backup, BR retries when it encounters certain network errors [#48528](https://github.com/pingcap/tidb/issues/48528) @[Leavrth](https://github.com/Leavrth)
 
 ## Bug fixes
 
 + TiDB
 
-    - note [#issue](链接) @[贡献者 GitHub ID](链接)
-    - note [#issue](链接) @[贡献者 GitHub ID](链接)
+    - Prohibit split table operations on non-integer clustered indexes [#47350](https://github.com/pingcap/tidb/issues/47350) @[tangenta](https://github.com/tangenta)
+    - Fix the issue of encoding time fields with incorrect timezone information [#46033](https://github.com/pingcap/tidb/issues/46033) @[tangenta](https://github.com/tangenta)
+    - Fix the issue that the Sort operator might cause TiDB to crash during the spill process [#47538](https://github.com/pingcap/tidb/issues/47538) @[windtalker](https://github.com/windtalker)
+    - Fix the issue that TiDB returns `Can't find column` for queries with `GROUP_CONCAT` [#41957](https://github.com/pingcap/tidb/issues/41957) @[AilinKid](https://github.com/AilinKid)
+    - Fix the panic issue of `batch-client` in `client-go` [#47691](https://github.com/pingcap/tidb/issues/47691) @[crazycs520](https://github.com/crazycs520)
+    - Fix the issue of incorrect memory usage estimation in `INDEX_LOOKUP_HASH_JOIN` [#47788](https://github.com/pingcap/tidb/issues/47788) @[SeaRise](https://github.com/SeaRise)
+    - Fix the issue of uneven workload caused by the rejoining of a TiFlash node that has been offline for a long time [#35418](https://github.com/pingcap/tidb/issues/35418) @[windtalker](https://github.com/windtalker)
+    - Fix the issue that the chunk cannot be reused when the HashJoin operator performs probe [#48082](https://github.com/pingcap/tidb/issues/48082) @[wshwsh12](https://github.com/wshwsh12)
+    - Fix the issue that the `COALESCE()` function returns incorrect result type for `DATE` type parameters [#46475](https://github.com/pingcap/tidb/issues/46475) @[xzhangxian1008](https://github.com/xzhangxian1008)
+    - Fix the issue that `UPDATE` statements with subqueries are incorrectly converted to PointGet [#48171](https://github.com/pingcap/tidb/issues/48171) @[hi-rustin](https://github.com/hi-rustin)
+    - Fix the issue that incorrect results are returned when the cached execution plans contain the comparison between date types and `unix_timestamp` [#48165](https://github.com/pingcap/tidb/issues/48165) @[qw4990](https://github.com/qw4990)
+    - Fix the issue that an error is reported when default inline common table expressions (CTEs) with aggregate functions or window functions are referenced by recursive CTEs [#47881](https://github.com/pingcap/tidb/issues/47881) @[elsa0520](https://github.com/elsa0520)
+    - Fix the issue that the optimizer mistakenly selects IndexFullScan to reduce sort introduced by window functions [#46177](https://github.com/pingcap/tidb/issues/46177) @[qw4990](https://github.com/qw4990)
+    - Fix the issue that multiple references to CTEs result in incorrect results due to condition pushdown of CTEs [#47881](https://github.com/pingcap/tidb/issues/47881) @[winoros](https://github.com/winoros)
+    - Fix the issue that the MySQL compression protocol cannot handle large loads of data (>=16M) [#47152](https://github.com/pingcap/tidb/issues/47152) [#47157](https://github.com/pingcap/tidb/issues/47157) [#47161](https://github.com/pingcap/tidb/issues/47161) @[dveeden](https://github.com/dveeden)
+    - Fix the issue that TiDB does not read `cgroup` resource limits when it is started with `systemd` [#47442](https://github.com/pingcap/tidb/issues/47442) @[hawkingrei](https://github.com/hawkingrei)
 
 + TiKV
 
-    - note [#issue](链接) @[贡献者 GitHub ID](链接)
-    - note [#issue](链接) @[贡献者 GitHub ID](链接)
+    - Fix the issue that retrying prewrite requests in the pessimistic transaction mode might cause the risk of data inconsistency in rare cases [#11187](https://github.com/tikv/tikv/issues/11187) @[MyonKeminta](https://github.com/MyonKeminta)
 
 + PD
 
-    - note [#issue](链接) @[贡献者 GitHub ID](链接)
-    - note [#issue](链接) @[贡献者 GitHub ID](链接)
+    - Fix the issue that `evict-leader-scheduler` might lose configuration [#6897](https://github.com/tikv/pd/issues/6897) @[HuSharp](https://github.com/HuSharp)
+    - Fix the issue that after a store goes offline, the monitoring metric of its statistics is not deleted [#7180](https://github.com/tikv/pd/issues/7180) @[rleungx](https://github.com/rleungx)
+    - Fix the issue that `canSync` and `hasMajority` might be calculated incorrectly for clusters adopting the Data Replication Auto Synchronous (DR Auto-Sync) mode when the configuration of Placement Rules is complex [#7201](https://github.com/tikv/pd/issues/7201) @[disksing](https://github.com/disksing)
+    - Fix the issue that the rule checker does not add Learners according to the configuration of Placement Rules [#7185](https://github.com/tikv/pd/issues/7185) @[nolouch](https://github.com/nolouch)
+    - Fix the issue that TiDB Dashboard cannot read PD `trace` data correctly [#7253](https://github.com/tikv/pd/issues/7253) @[nolouch](https://github.com/nolouch)
+    - Fix the issue that PD might panic due to empty Regions obtained internally [#7261](https://github.com/tikv/pd/issues/7261) @[lhy1024](https://github.com/lhy1024)
+    - Fix the issue that `available_stores` is calculated incorrectly for clusters adopting the Data Replication Auto Synchronous (DR Auto-Sync) mode [#7221](https://github.com/tikv/pd/issues/7221) @[disksing](https://github.com/disksing)
+    - Fix the issue that PD might delete normal Peers when TiKV nodes are unavailable [#7249](https://github.com/tikv/pd/issues/7249) @[lhy1024](https://github.com/lhy1024)
+    - Fix the issue that adding multiple TiKV nodes to a large cluster might cause TiKV heartbeat reporting to become slow or stuck [#7248](https://github.com/tikv/pd/issues/7248) @[rleungx](https://github.com/rleungx)
 
 + TiFlash
 
-    - note [#issue](链接) @[贡献者 GitHub ID](链接)
-    - note [#issue](链接) @[贡献者 GitHub ID](链接)
+    - Fix the issue that the `UPPER()` and `LOWER()` functions return inconsistent results between TiDB and TiFlash [#7695](https://github.com/pingcap/tiflash/issues/7695) @[windtalker](https://github.com/windtalker)
+    - Fix the issue that executing queries on empty partitions causes query failure [#8220](https://github.com/pingcap/tiflash/issues/8220) @[JaySon-Huang](https://github.com/JaySon-Huang)
+    - Fix the panic issue caused by table creation failure when replicating TiFlash replicas [#8217](https://github.com/pingcap/tiflash/issues/8217) @[hongyunyan](https://github.com/hongyunyan)
 
 + Tools
 
     + Backup & Restore (BR)
 
-        - note [#issue](链接) @[贡献者 GitHub ID](链接)
-        - note [#issue](链接) @[贡献者 GitHub ID](链接)
+        - Fix the issue that PITR might skip restoring the `CREATE INDEX` DDL statement [#47482](https://github.com/pingcap/tidb/issues/47482) @[Leavrth](https://github.com/Leavrth)
+        - Fix the issue that the log backup might get stuck in some scenarios when backing up large wide tables [#15714](https://github.com/tikv/tikv/issues/15714) @[YuJuncen](https://github.com/YuJuncen)
 
     + TiCDC
 
-        - note [#issue](链接) @[贡献者 GitHub ID](链接)
-        - note [#issue](链接) @[贡献者 GitHub ID](链接)
-
-    + TiDB Data Migration (DM)
-
-        - note [#issue](链接) @[贡献者 GitHub ID](链接)
-        - note [#issue](链接) @[贡献者 GitHub ID](链接)
-
-    + TiDB Lightning
-
-        - note [#issue](链接) @[贡献者 GitHub ID](链接)
-        - note [#issue](链接) @[贡献者 GitHub ID](链接)
-
-    + TiUP
-
-        - note [#issue](链接) @[贡献者 GitHub ID](链接)
-        - note [#issue](链接) @[贡献者 GitHub ID](链接)
+        - Fix the performance issue caused by accessing NFS directories when replicating data to an object store sink [#10041](https://github.com/pingcap/tiflow/issues/10041) @[CharlesCheung96](https://github.com/CharlesCheung96)
+        - Fix the issue that the storage path is misspelled when `claim-check` is enabled [#10036](https://github.com/pingcap/tiflow/issues/10036) @[3AceShowHand](https://github.com/3AceShowHand)
+        - Fix the issue that TiCDC scheduling is not balanced in some cases [#9845](https://github.com/pingcap/tiflow/issues/9845) @[3AceShowHand](https://github.com/3AceShowHand)
+        - Fix the issue that TiCDC might get stuck when replicating data to Kafka [#9855](https://github.com/pingcap/tiflow/issues/9855) @[hicqu](https://github.com/hicqu)
+        - Fix the issue that the TiCDC processor might panic in some cases [#9849](https://github.com/pingcap/tiflow/issues/9849) [#9915](https://github.com/pingcap/tiflow/issues/9915) @[hicqu](https://github.com/hicqu) @[3AceShowHand](https://github.com/3AceShowHand)
+        - Fix the issue that enabling `kv-client.enable-multiplexing` causes replication tasks to get stuck [#9673](https://github.com/pingcap/tiflow/issues/9673) @[fubinzh](https://github.com/fubinzh)
+        - Fix the issue that an owner node gets stuck due to NFS failure when the redo log is enabled [#9886](https://github.com/pingcap/tiflow/issues/9886) @[3AceShowHand](https://github.com/3AceShowHand)
 
 ## Performance test
 
