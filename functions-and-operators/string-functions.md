@@ -179,13 +179,14 @@ Return the length of a string in bytes.
 
 ### [`LIKE`](https://dev.mysql.com/doc/refman/8.0/en/string-comparison-functions.html#operator_like)
 
-The `LIKE` operator is used for simple string matching, the format `expr LIKE pat [ESCAPE 'escape_char']` returns `1(TRUE)` or `0(FALSE)`
-If either `expr` or `pat` is `NULL`, the result will be `NULL`.
-You can use 2 wildcard parameter with`LIKE`:
-- `%` matches any number of characters including 0 characters
-- `_` matches exactly only 1 character, not including 0
+The `LIKE` operator is used for simple string matching. The expression `expr LIKE pat [ESCAPE 'escape_char']` returns `1` (`TRUE`) or `0` (`FALSE`). If either `expr` or `pat` is `NULL`, the result is `NULL`.
 
-These examples' collation is `utf8mb4_bin` except specify explicitly.
+You can use the following two wildcard parameters with `LIKE`:
+
+- `%` matches any number of characters, including zero characters.
+- `_` matches exactly one character.
+
+By default, the following examples use the `utf8mb4_bin` collation, unless explicitly specified.
 
 ```sql
 SELECT NULL LIKE '%' as result;
@@ -194,21 +195,27 @@ SELECT NULL LIKE '%' as result;
 +--------+
 |   NULL |
 +--------+
+```
 
+```sql
 SELECT 'sushi!!!' LIKE 'sushi_' AS result;
 +--------+
 | result |
 +--------+
 |      0 |
 +--------+
+```
 
+```sql
 SELECT '🍣🍺sushi🍣🍺' LIKE '%sushi%' AS result;
 +--------+
 | result |
 +--------+
 |      1 |
 +--------+
+```
 
+```sql
 SELECT '🍣🍺sushi🍣🍺' LIKE '%🍣%' AS result;
 +--------+
 | result |
@@ -217,7 +224,7 @@ SELECT '🍣🍺sushi🍣🍺' LIKE '%🍣%' AS result;
 +--------+
 ```
 
-If you don't specify the `ESCAPE` character, `\` will be assumed.
+The default escape character is `\`:
 
 ```sql
 SELECT 'sushi!!!' LIKE 'sushi\_' AS result;
@@ -226,7 +233,9 @@ SELECT 'sushi!!!' LIKE 'sushi\_' AS result;
 +--------+
 |      0 |
 +--------+
+```
 
+```sql
 SELECT 'sushi_' LIKE 'sushi\_' AS result;
 +--------+
 | result |
@@ -235,7 +244,7 @@ SELECT 'sushi_' LIKE 'sushi\_' AS result;
 +--------+
 ```
 
-To specify the different escape character, you can use `ESCAPE` clause.
+To specify a different escape character, you can use the `ESCAPE` clause:
 
 ```sql
 SELECT 'sushi_' LIKE 'sushi*_' ESCAPE '*' AS result;
@@ -244,7 +253,9 @@ SELECT 'sushi_' LIKE 'sushi*_' ESCAPE '*' AS result;
 +--------+
 |      1 |
 +--------+
+```
 
+```sql
 SELECT 'sushi!' LIKE 'sushi*_' ESCAPE '*' AS result;
 +--------+
 | result |
@@ -262,7 +273,9 @@ SELECT 10 LIKE '1%' AS result;
 +--------+
 |      1 |
 +--------+
+```
 
+```sql
 SELECT 10000 LIKE '12%' AS result;
 +--------+
 | result |
@@ -271,7 +284,7 @@ SELECT 10000 LIKE '12%' AS result;
 +--------+
 ```
 
-You can specify collation to use explicitly with `COLLATE`.
+To specify a collation explicitly, you can use `COLLATE`.
 
 ```sql
 SHOW VARIABLES LIKE 'collation_connection';
@@ -280,21 +293,29 @@ SHOW VARIABLES LIKE 'collation_connection';
 +----------------------+-------------+
 | collation_connection | utf8mb4_bin |
 +----------------------+-------------+
+```
 
+Examples:
+
+```sql
 SELECT '🍣🍺sushi🍣🍺' LIKE '%sushi%' AS result;
 +--------+
 | result |
 +--------+
 |      1 |
 +--------+
+```
 
+```sql
 SELECT '🍣🍺sushi🍣🍺' LIKE '%SUSHI%' AS result;
 +--------+
 | result |
 +--------+
 |      0 |
 +--------+
+```
 
+```sql
 SELECT '🍣🍺Sushi🍣🍺' COLLATE utf8mb4_unicode_ci LIKE '%SUSHI%' AS result;
 +--------+
 | result |
@@ -312,6 +333,8 @@ This function is multi-byte safe and is case-sensitive only if at least one argu
 
 These examples' collation is `utf8mb4_bin` except specify explicitly.
 
+Examples:
+
 ```sql
 SET collation_connection='utf8mb4_bin';
 SHOW VARIABLES LIKE 'collation_connection';
@@ -320,63 +343,81 @@ SHOW VARIABLES LIKE 'collation_connection';
 +----------------------+-------------+
 | collation_connection | utf8mb4_bin |
 +----------------------+-------------+
+```
 
+```sql
 SELECT LOCATE('bar', 'foobarbar');
 +----------------------------+
 | LOCATE('bar', 'foobarbar') |
 +----------------------------+
 |                          4 |
 +----------------------------+
+```
 
+```sql
 SELECT LOCATE('baz', 'foobarbar');
 +----------------------------+
 | LOCATE('baz', 'foobarbar') |
 +----------------------------+
 |                          0 |
 +----------------------------+
+```
 
+```sql
 SELECT LOCATE('bar', 'fooBARBAR');
 +----------------------------+
 | LOCATE('bar', 'fooBARBAR') |
 +----------------------------+
 |                          0 |
 +----------------------------+
+```
 
+```sql
 SELECT LOCATE('bar', 'foobarBAR', 100);
 +---------------------------------+
 | LOCATE('bar', 'foobarBAR', 100) |
 +---------------------------------+
 |                               0 |
 +---------------------------------+
+```
 
+```sql
 SELECT LOCATE('bar', 'foobarbar', 5);
 +-------------------------------+
 | LOCATE('bar', 'foobarbar', 5) |
 +-------------------------------+
 |                             7 |
 +-------------------------------+
+```
 
+```sql
 SELECT LOCATE('bar', NULL);
 +---------------------+
 | LOCATE('bar', NULL) |
 +---------------------+
 |                NULL |
 +---------------------+
+```
 
+```sql
 SELECT LOCATE('い', 'たいでぃーびー');
 +----------------------------------------+
 | LOCATE('い', 'たいでぃーびー')         |
 +----------------------------------------+
 |                                      2 |
 +----------------------------------------+
+```
 
+```sql
 SELECT LOCATE('い', 'たいでぃーびー', 3);
 +-------------------------------------------+
 | LOCATE('い', 'たいでぃーびー', 3)         |
 +-------------------------------------------+
 |                                         0 |
 +-------------------------------------------+
+```
 
+```sql
 SET collation_connection='utf8mb4_unicode_ci';
 SHOW VARIABLES LIKE 'collation_connection';
 +----------------------+--------------------+
@@ -384,21 +425,27 @@ SHOW VARIABLES LIKE 'collation_connection';
 +----------------------+--------------------+
 | collation_connection | utf8mb4_unicode_ci |
 +----------------------+--------------------+
+```
 
+```sql
 SELECT LOCATE('い', 'たいでぃーびー', 3);
 +-------------------------------------------+
 | LOCATE('い', 'たいでぃーびー', 3)         |
 +-------------------------------------------+
 |                                         4 |
 +-------------------------------------------+
+```
 
+```sql
 SELECT LOCATE('🍺', '🍣🍣🍣🍺🍺');
 +----------------------------------------+
 | LOCATE('🍺', '🍣🍣🍣🍺🍺')            |
 +----------------------------------------+
 |                                      1 |
 +----------------------------------------+
+```
 
+```sql
 SET collation_connection='utf8mb4_bin';
 SHOW VARIABLES LIKE 'collation_connection';
 +----------------------+-------------+
@@ -406,35 +453,45 @@ SHOW VARIABLES LIKE 'collation_connection';
 +----------------------+-------------+
 | collation_connection | utf8mb4_bin |
 +----------------------+-------------+
+```
 
+```sql
 SELECT LOCATE('🍺', '🍣🍣🍣🍺🍺');
 +----------------------------------------+
 | LOCATE('🍺', '🍣🍣🍣🍺🍺')                         |
 +----------------------------------------+
 |                                      4 |
 +----------------------------------------+
+```
 
+```sql
 SELECT LOCATE('b', _binary'aBcde');
 +-----------------------------+
 | LOCATE('b', _binary'aBcde') |
 +-----------------------------+
 |                           0 |
 +-----------------------------+
+```
 
+```sql
 SELECT LOCATE('B', _binary'aBcde');
 +-----------------------------+
 | LOCATE('B', _binary'aBcde') |
 +-----------------------------+
 |                           2 |
 +-----------------------------+
+```
 
+```sql
 SELECT LOCATE(_binary'b', 'aBcde');
 +-----------------------------+
 | LOCATE(_binary'b', 'aBcde') |
 +-----------------------------+
 |                           0 |
 +-----------------------------+
+```
 
+```sql
 SELECT LOCATE(_binary'B', 'aBcde');
 +-----------------------------+
 | LOCATE(_binary'B', 'aBcde') |
