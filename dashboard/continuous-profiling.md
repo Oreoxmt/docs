@@ -1,6 +1,6 @@
 ---
 title: TiDB Dashboard Instance Profiling - Continuous Profiling
-summary: Learn how to collect performance data from TiDB, TiKV and PD continuously to reduce MTTR.
+summary: TiDB Dashboard Continuous Profiling allows experts to collect and analyze performance data continuously from each instance, helping to pinpoint and resolve sophisticated performance problems. It stores more data than Manual Profiling, enabling analysis of both current and historical issues. The feature can be accessed through the dashboard or a browser, and can be enabled and disabled as needed. Performance impact is minimal, making it suitable for production environments.
 ---
 
 # TiDB Dashboard Instance Profiling - Continuous Profiling
@@ -28,7 +28,7 @@ All performance data in [Manual Profiling](/dashboard/dashboard-profiling.md#sup
 
 - CPU: The CPU overhead of each internal function on TiDB, TiKV, TiFlash, and PD instances
 
-- Heap: The memory consumption of each internal function on TiDB and PD instances
+- Heap: The memory consumption of each internal function on TiDB, TiKV, and PD instances
 
 - Mutex: The mutex contention states on TiDB and PD instances
 

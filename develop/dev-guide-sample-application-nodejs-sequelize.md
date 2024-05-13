@@ -82,6 +82,7 @@ Connect to your TiDB cluster depending on the TiDB deployment option you've sele
 3. Ensure the configurations in the connection dialog match your operating environment.
 
     - **Endpoint Type** is set to `Public`
+    - **Branch** is set to `main`
     - **Connect With** is set to `General`
     - **Operating System** matches your environment.
 
@@ -89,11 +90,11 @@ Connect to your TiDB cluster depending on the TiDB deployment option you've sele
     >
     > In Node.js applications, you don't have to provide an SSL CA certificate, because Node.js uses the built-in [Mozilla CA certificate](https://wiki.mozilla.org/CA/Included_Certificates) by default when establishing the TLS (SSL) connection.
 
-4. Click **Create password** to create a random password.
+4. Click **Generate Password** to create a random password.
 
     > **Tip**
     >
-    > If you have generated a password before, you can either use the original password or click **Reset password** to generate a new one.
+    > If you have generated a password before, you can either use the original password or click **Reset Password** to generate a new one.
 
 5. Run the following command to copy `.env.example` and rename it to `.env`:
 
@@ -102,7 +103,7 @@ Connect to your TiDB cluster depending on the TiDB deployment option you've sele
     ```
 
 6. Edit the `.env` file, set up the environment variables as follows, replace the corresponding placeholders `{}` with connection parameters on the connection dialog:
-  
+
     ```dotenv
     TIDB_HOST='{host}'
     TIDB_PORT='4000'
@@ -322,4 +323,14 @@ For more information, refer to [Delete data](/develop/dev-guide-delete-data.md).
 
 ## Need help?
 
+<CustomContent platform="tidb">
+
+Ask questions on the [Discord](https://discord.gg/DQZ2dy3cuc?utm_source=doc), or [create a support ticket](/support.md).
+
+</CustomContent>
+
+<CustomContent platform="tidb-cloud">
+
 Ask questions on the [Discord](https://discord.gg/DQZ2dy3cuc?utm_source=doc), or [create a support ticket](https://support.pingcap.com/).
+
+</CustomContent>

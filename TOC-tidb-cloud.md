@@ -23,6 +23,8 @@
       - [JetBrains DataGrip](/develop/dev-guide-gui-datagrip.md)
       - [DBeaver](/develop/dev-guide-gui-dbeaver.md)
       - [VS Code](/develop/dev-guide-gui-vscode-sqltools.md)
+      - [MySQL Workbench](/develop/dev-guide-gui-mysql-workbench.md)
+      - [Navicat](/develop/dev-guide-gui-navicat.md)
     - [Choose Driver or ORM](/develop/dev-guide-choose-driver-or-orm.md)
     - Java
       - [JDBC](/develop/dev-guide-sample-application-java-jdbc.md)
@@ -51,6 +53,12 @@
     - Ruby
       - [mysql2](/develop/dev-guide-sample-application-ruby-mysql2.md)
       - [Rails](/develop/dev-guide-sample-application-ruby-rails.md)
+    - [WordPress](/tidb-cloud/dev-guide-wordpress.md)
+    - Serverless Driver (Beta)
+      - [TiDB Cloud Serverless Driver](/tidb-cloud/serverless-driver.md)
+      - [Node.js Example](/tidb-cloud/serverless-driver-node-example.md)
+      - [Prisma Example](/tidb-cloud/serverless-driver-prisma-example.md)
+      - [Kysely Example](/tidb-cloud/serverless-driver-kysely-example.md)
   - Third-Party Support
     - [Third-Party Tools Supported by TiDB](/develop/dev-guide-third-party-support.md)
     - [Known Incompatibility Issues with Third-Party Tools](/develop/dev-guide-third-party-tools-compatibility.md)
@@ -107,7 +115,7 @@
   - Manage TiDB Serverless Clusters
     - [Create a TiDB Serverless Cluster](/tidb-cloud/create-tidb-cluster-serverless.md)
     - Connect to Your TiDB Serverless Cluster
-      - [Connection Method Overview](/tidb-cloud/connect-to-tidb-cluster-serverless.md)
+      - [Connection Overview](/tidb-cloud/connect-to-tidb-cluster-serverless.md)
       - [Connect via Public Endpoint](/tidb-cloud/connect-via-standard-connection-serverless.md)
       - [Connect via Private Endpoint](/tidb-cloud/set-up-private-endpoint-connections-serverless.md)
     - Branch (Beta)
@@ -139,6 +147,7 @@
     - [TiFlash Query Result Materialization](/tiflash/tiflash-results-materialization.md)
     - [TiFlash Late Materialization](/tiflash/tiflash-late-materialization.md)
     - [Compatibility](/tiflash/tiflash-compatibility.md)
+    - [Pipeline Execution Model](/tiflash/tiflash-pipeline-model.md)
   - Monitor and Alert
     - [Overview](/tidb-cloud/monitor-tidb-cluster.md)
     - [Built-in Metrics](/tidb-cloud/built-in-monitoring.md)
@@ -216,12 +225,14 @@
       - [Import Sample Data (SQL File)](/tidb-cloud/import-sample-data.md)
       - [Import CSV Files from Amazon S3 or GCS](/tidb-cloud/import-csv-files.md)
       - [Import Apache Parquet Files from Amazon S3 or GCS](/tidb-cloud/import-parquet-files.md)
+      - [Import with MySQL CLI](/tidb-cloud/import-with-mysql-cli.md)
   - Reference
       - [Configure Amazon S3 Access and GCS Access](/tidb-cloud/config-s3-and-gcs-access.md)
       - [Naming Conventions for Data Import](/tidb-cloud/naming-conventions-for-data-import.md)
       - [CSV Configurations for Importing Data](/tidb-cloud/csv-config-for-import-data.md)
       - [Troubleshoot Access Denied Errors during Data Import from Amazon S3](/tidb-cloud/troubleshoot-import-access-denied-error.md)
       - [Precheck Errors, Migration Errors, and Alerts for Data Migration](/tidb-cloud/tidb-cloud-dm-precheck-and-troubleshooting.md)
+      - [Connect AWS DMS to TiDB Cloud clusters](/tidb-cloud/tidb-cloud-connect-aws-dms.md)
 - Explore Data
   - [Chat2Query (Beta)](/tidb-cloud/explore-data-with-chat2query.md)
 - Data Service (Beta)
@@ -239,13 +250,14 @@
 - Stream Data
   - [Changefeed Overview](/tidb-cloud/changefeed-overview.md)
   - [To MySQL Sink](/tidb-cloud/changefeed-sink-to-mysql.md)
-  - [To Kafka Sink (Beta)](/tidb-cloud/changefeed-sink-to-apache-kafka.md)
+  - [To Kafka Sink](/tidb-cloud/changefeed-sink-to-apache-kafka.md)
   - [To TiDB Cloud Sink](/tidb-cloud/changefeed-sink-to-tidb-cloud.md)
   - [To Cloud Storage](/tidb-cloud/changefeed-sink-to-cloud-storage.md)
 - Security
   - Identity Access Control
     - [Password Authentication](/tidb-cloud/tidb-cloud-password-authentication.md)
-    - [SSO Authentication](/tidb-cloud/tidb-cloud-sso-authentication.md)
+    - [Basic SSO Authentication](/tidb-cloud/tidb-cloud-sso-authentication.md)
+    - [Organization SSO Authentication](/tidb-cloud/tidb-cloud-org-sso-authentication.md)
     - [Identity Access Management](/tidb-cloud/manage-user-access.md)
   - Network Access Control
     - TiDB Serverless
@@ -272,8 +284,14 @@
   - [Billing for Changefeed](/tidb-cloud/tidb-cloud-billing-ticdc-rcu.md)
   - [Billing for Data Migration](/tidb-cloud/tidb-cloud-billing-dm.md)
 - API
+- API
   - [API Overview](/tidb-cloud/api-overview.md)
-  - [API Reference](https://docs.pingcap.com/tidbcloud/api/v1beta)
+  - API Reference
+    - v1beta1
+      - [Billing](https://docs.pingcap.com/tidbcloud/api/v1beta1/billing)
+      - [IAM](https://docs.pingcap.com/tidbcloud/api/v1beta1/apikey)
+      - [MSP](https://docs.pingcap.com/tidbcloud/api/msp/v1beta1)
+    - [v1beta](https://docs.pingcap.com/tidbcloud/api/v1beta)
 - Integrations
   - [Airbyte](/tidb-cloud/integrate-tidbcloud-with-airbyte.md)
   - [Amazon AppFlow](/develop/dev-guide-aws-appflow-integration.md)
@@ -306,9 +324,16 @@
   - [TiDB Serverless Limitations](/tidb-cloud/serverless-limitations.md)
   - [Limited SQL Features on TiDB Cloud](/tidb-cloud/limited-sql-features.md)
   - [TiDB Limitations](/tidb-limitations.md)
+  - TiDB Distributed eXecution Framework (DXF)
+    - [Introduction](/tidb-distributed-execution-framework.md)
+    - [TiDB Global Sort](/tidb-global-sort.md)
   - Benchmarks
-    - [TPC-C Performance Test Report](/tidb-cloud/v7.1.0-performance-benchmarking-with-tpcc.md)
-    - [Sysbench Performance Test Report](/tidb-cloud/v7.1.0-performance-benchmarking-with-sysbench.md)
+    - TiDB v7.5
+      - [TPC-C Performance Test Report](/tidb-cloud/v7.5.0-performance-benchmarking-with-tpcc.md)
+      - [Sysbench Performance Test Report](/tidb-cloud/v7.5.0-performance-benchmarking-with-sysbench.md)
+    - TiDB v7.1
+      - [TPC-C Performance Test Report](/tidb-cloud/v7.1.0-performance-benchmarking-with-tpcc.md)
+      - [Sysbench Performance Test Report](/tidb-cloud/v7.1.0-performance-benchmarking-with-sysbench.md)
   - SQL
     - [Explore SQL with TiDB](/basic-sql-operations.md)
     - SQL Language Structure and Syntax
@@ -338,7 +363,9 @@
       - [`ALTER INDEX`](/sql-statements/sql-statement-alter-index.md)
       - [`ALTER INSTANCE`](/sql-statements/sql-statement-alter-instance.md)
       - [`ALTER PLACEMENT POLICY`](/sql-statements/sql-statement-alter-placement-policy.md)
+      - [`ALTER RANGE`](/sql-statements/sql-statement-alter-range.md)
       - [`ALTER RESOURCE GROUP`](/sql-statements/sql-statement-alter-resource-group.md)
+      - [`ALTER SEQUENCE`](/sql-statements/sql-statement-alter-sequence.md)
       - [`ALTER TABLE`](/sql-statements/sql-statement-alter-table.md)
       - [`ALTER TABLE COMPACT`](/sql-statements/sql-statement-alter-table-compact.md)
       - [`ALTER USER`](/sql-statements/sql-statement-alter-user.md)
@@ -346,6 +373,7 @@
       - [`BACKUP`](/sql-statements/sql-statement-backup.md)
       - [`BATCH`](/sql-statements/sql-statement-batch.md)
       - [`BEGIN`](/sql-statements/sql-statement-begin.md)
+      - [`CANCEL IMPORT JOB`](/sql-statements/sql-statement-cancel-import-job.md)
       - [`CHANGE COLUMN`](/sql-statements/sql-statement-change-column.md)
       - [`COMMIT`](/sql-statements/sql-statement-commit.md)
       - [`CREATE [GLOBAL|SESSION] BINDING`](/sql-statements/sql-statement-create-binding.md)
@@ -379,7 +407,7 @@
       - [`EXECUTE`](/sql-statements/sql-statement-execute.md)
       - [`EXPLAIN ANALYZE`](/sql-statements/sql-statement-explain-analyze.md)
       - [`EXPLAIN`](/sql-statements/sql-statement-explain.md)
-      - [`FLASHBACK CLUSTER TO TIMESTAMP`](/sql-statements/sql-statement-flashback-to-timestamp.md)
+      - [`FLASHBACK CLUSTER`](/sql-statements/sql-statement-flashback-cluster.md)
       - [`FLASHBACK DATABASE`](/sql-statements/sql-statement-flashback-database.md)
       - [`FLASHBACK TABLE`](/sql-statements/sql-statement-flashback-table.md)
       - [`FLUSH PRIVILEGES`](/sql-statements/sql-statement-flush-privileges.md)
@@ -387,6 +415,7 @@
       - [`FLUSH TABLES`](/sql-statements/sql-statement-flush-tables.md)
       - [`GRANT <privileges>`](/sql-statements/sql-statement-grant-privileges.md)
       - [`GRANT <role>`](/sql-statements/sql-statement-grant-role.md)
+      - [`IMPORT INTO`](/sql-statements/sql-statement-import-into.md)
       - [`INSERT`](/sql-statements/sql-statement-insert.md)
       - [`KILL [TIDB]`](/sql-statements/sql-statement-kill.md)
       - [`LOAD DATA`](/sql-statements/sql-statement-load-data.md)
@@ -432,9 +461,8 @@
       - [`SHOW ERRORS`](/sql-statements/sql-statement-show-errors.md)
       - [`SHOW [FULL] FIELDS FROM`](/sql-statements/sql-statement-show-fields-from.md)
       - [`SHOW GRANTS`](/sql-statements/sql-statement-show-grants.md)
-      - [`SHOW INDEX [FROM|IN]`](/sql-statements/sql-statement-show-index.md)
+      - [`SHOW IMPORT JOB`](/sql-statements/sql-statement-show-import-job.md)
       - [`SHOW INDEXES [FROM|IN]`](/sql-statements/sql-statement-show-indexes.md)
-      - [`SHOW KEYS [FROM|IN]`](/sql-statements/sql-statement-show-keys.md)
       - [`SHOW MASTER STATUS`](/sql-statements/sql-statement-show-master-status.md)
       - [`SHOW PLACEMENT`](/sql-statements/sql-statement-show-placement.md)
       - [`SHOW PLACEMENT FOR`](/sql-statements/sql-statement-show-placement-for.md)
@@ -445,7 +473,7 @@
       - [`SHOW PROFILES`](/sql-statements/sql-statement-show-profiles.md)
       - [`SHOW SCHEMAS`](/sql-statements/sql-statement-show-schemas.md)
       - [`SHOW STATS_HEALTHY`](/sql-statements/sql-statement-show-stats-healthy.md)
-      - [`SHOW STATS_HISTOGRAMS`](/sql-statements/sql-statement-show-histograms.md)
+      - [`SHOW STATS_HISTOGRAMS`](/sql-statements/sql-statement-show-stats-histograms.md)
       - [`SHOW STATS_LOCKED`](/sql-statements/sql-statement-show-stats-locked.md)
       - [`SHOW STATS_META`](/sql-statements/sql-statement-show-stats-meta.md)
       - [`SHOW STATUS`](/sql-statements/sql-statement-show-status.md)
@@ -491,6 +519,7 @@
       - [Miscellaneous Functions](/functions-and-operators/miscellaneous-functions.md)
       - [Precision Math](/functions-and-operators/precision-math.md)
       - [Set Operations](/functions-and-operators/set-operators.md)
+      - [Sequence Functions](/functions-and-operators/sequence-functions.md)
       - [List of Expressions for Pushdown](/functions-and-operators/expressions-pushed-down.md)
       - [TiDB Specific Functions](/functions-and-operators/tidb-functions.md)
     - [Clustered Indexes](/clustered-indexes.md)
@@ -538,6 +567,7 @@
         - [`DDL_JOBS`](/information-schema/information-schema-ddl-jobs.md)
         - [`DEADLOCKS`](/information-schema/information-schema-deadlocks.md)
         - [`ENGINES`](/information-schema/information-schema-engines.md)
+        - [`KEYWORDS`](/information-schema/information-schema-keywords.md)
         - [`KEY_COLUMN_USAGE`](/information-schema/information-schema-key-column-usage.md)
         - [`MEMORY_USAGE`](/information-schema/information-schema-memory-usage.md)
         - [`MEMORY_USAGE_OPS_HISTORY`](/information-schema/information-schema-memory-usage-ops-history.md)
@@ -557,6 +587,7 @@
         - [`TABLE_STORAGE_STATS`](/information-schema/information-schema-table-storage-stats.md)
         - [`TIDB_HOT_REGIONS_HISTORY`](/information-schema/information-schema-tidb-hot-regions-history.md)
         - [`TIDB_INDEXES`](/information-schema/information-schema-tidb-indexes.md)
+        - [`TIDB_INDEX_USAGE`](/information-schema/information-schema-tidb-index-usage.md)
         - [`TIDB_SERVERS_INFO`](/information-schema/information-schema-tidb-servers-info.md)
         - [`TIDB_TRX`](/information-schema/information-schema-tidb-trx.md)
         - [`TIFLASH_REPLICA`](/information-schema/information-schema-tiflash-replica.md)
@@ -572,9 +603,14 @@
       - PERFORMANCE_SCHEMA
         - [Overview](/performance-schema/performance-schema.md)
         - [`SESSION_CONNECT_ATTRS`](/performance-schema/performance-schema-session-connect-attrs.md)
+      - SYS
+        - [Overview](/sys-schema/sys-schema.md)
+        - [`schema_unused_indexes`](/sys-schema/sys-schema-unused-indexes.md)
     - [Metadata Lock](/metadata-lock.md)
     - [Use UUIDs](/best-practices/uuid.md)
+    - [TiDB Accelerated Table Creation](/accelerated-table-creation.md)
   - [System Variables](/system-variables.md)
+  - [Server Status Variables](/status-variables.md)
   - Storage Engines
     - TiKV
         - [TiKV Overview](/tikv-overview.md)
@@ -618,8 +654,7 @@
     - [update](/tidb-cloud/ticloud-update.md)
   - [Table Filter](/table-filter.md)
   - [Resource Control](/tidb-resource-control.md)
-  - [TiDB Backend Task Distributed Execution Framework](/tidb-distributed-execution-framework.md)
-  - [TiDB Global Sort](/tidb-global-sort.md)
+  - [URI Formats of External Storage Services](/external-storage-uri.md)
   - [DDL Execution Principles and Best Practices](/ddl-introduction.md)
   - [Troubleshoot Inconsistency Between Data and Indexes](/troubleshoot-data-inconsistency-errors.md)
   - [Support](/tidb-cloud/tidb-cloud-support.md)
@@ -633,4 +668,6 @@
   - [2021](/tidb-cloud/release-notes-2021.md)
   - [2020](/tidb-cloud/release-notes-2020.md)
 - Maintenance Notification
+  - [[2023-11-14] TiDB Dedicated Scale Feature Maintenance Notification](/tidb-cloud/notification-2023-11-14-scale-feature-maintenance.md)
+  - [[2023-09-26] TiDB Cloud Console Maintenance Notification](/tidb-cloud/notification-2023-09-26-console-maintenance.md)
   - [[2023-08-31] TiDB Cloud Console Maintenance Notification](/tidb-cloud/notification-2023-08-31-console-maintenance.md)

@@ -1,6 +1,6 @@
 ---
 title: Best Practices for TiKV Performance Tuning with Massive Regions
-summary: Learn how to tune the performance of TiKV with a massive amount of Regions.
+summary: TiKV performance tuning involves reducing the number of Regions and messages, increasing Raftstore concurrency, enabling Hibernate Region and Region Merge, adjusting Raft base tick interval, increasing TiKV instances, and adjusting Region size. Other issues include slow PD leader switching and outdated PD routing information.
 aliases: ['/docs/dev/best-practices/massive-regions-best-practices/','/docs/dev/reference/best-practices/massive-regions/']
 ---
 
@@ -66,7 +66,7 @@ By default, `raftstore.store-pool-size` is configured to `2` in TiKV. If a bottl
 
 ### Method 2: Enable Hibernate Region
 
-In the actual situation, read and write requests are not evenly distributed on every Region. Instead, they are concentrated on a few Regions. Then you can minimize the number of messages between the Raft leader and the followers for the temporarily idle Regions, which is the feature of Hibernate Region. In this feature, Raftstore does sent tick messages to the Raft state machines of idle Regions if not necessary. Then these Raft state machines will not be triggered to generate heartbeat messages, which can greatly reduce the workload of Raftstore.
+In the actual situation, read and write requests are not evenly distributed on every Region. Instead, they are concentrated on a few Regions. Then you can minimize the number of messages between the Raft leader and the followers for the temporarily idle Regions, which is the feature of Hibernate Region. In this feature, Raftstore doesn't send tick messages to the Raft state machines of idle Regions if not necessary. Then these Raft state machines will not be triggered to generate heartbeat messages, which can greatly reduce the workload of Raftstore.
 
 Hibernate Region is enabled by default in [TiKV master](https://github.com/tikv/tikv/tree/master). You can configure this feature according to your needs. For details, refer to [Configure Hibernate Region](/tikv-configuration-file.md).
 

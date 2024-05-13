@@ -88,6 +88,7 @@ Connect to your TiDB cluster depending on the TiDB deployment option you've sele
 3. Ensure the configurations in the connection dialog match your operating environment.
 
     - **Endpoint Type** is set to `Public`
+    - **Branch** is set to `main`
     - **Connect With** is set to `General`
     - **Operating System** matches your environment.
 
@@ -95,11 +96,11 @@ Connect to your TiDB cluster depending on the TiDB deployment option you've sele
     >
     > In Node.js applications, you don't have to provide an SSL CA certificate, because Node.js uses the built-in [Mozilla CA certificate](https://wiki.mozilla.org/CA/Included_Certificates) by default when establishing the TLS (SSL) connection.
 
-4. Click **Create password** to create a random password.
+4. Click **Generate Password** to create a random password.
 
     > **Tip**
     >
-    > If you have generated a password before, you can either use the original password or click **Reset password** to generate a new one.
+    > If you have generated a password before, you can either use the original password or click **Reset Password** to generate a new one.
 
 5. Copy and paste the corresponding connection string into `env.json`. The following is an example:
 
@@ -211,20 +212,20 @@ You can deploy the AWS Lambda Function using either the [SAM CLI](#sam-cli-deplo
     #        Setting default arguments for 'sam deploy'
     #        =========================================
     #        Stack Name [sam-app]: tidb-aws-lambda-quickstart
-    #        AWS Region [us-east-1]: 
+    #        AWS Region [us-east-1]:
     #        #Shows you resources changes to be deployed and require a 'Y' to initiate deploy
-    #        Confirm changes before deploy [y/N]: 
+    #        Confirm changes before deploy [y/N]:
     #        #SAM needs permission to be able to create roles to connect to the resources in your template
-    #        Allow SAM CLI IAM role creation [Y/n]: 
+    #        Allow SAM CLI IAM role creation [Y/n]:
     #        #Preserves the state of previously provisioned resources when an operation fails
-    #        Disable rollback [y/N]: 
+    #        Disable rollback [y/N]:
     #        tidbHelloWorldFunction may not have authorization defined, Is this okay? [y/N]: y
     #        tidbHelloWorldFunction may not have authorization defined, Is this okay? [y/N]: y
     #        tidbHelloWorldFunction may not have authorization defined, Is this okay? [y/N]: y
     #        tidbHelloWorldFunction may not have authorization defined, Is this okay? [y/N]: y
-    #        Save arguments to configuration file [Y/n]: 
-    #        SAM configuration file [samconfig.toml]: 
-    #        SAM configuration environment [default]: 
+    #        Save arguments to configuration file [Y/n]:
+    #        SAM configuration file [samconfig.toml]:
+    #        SAM configuration environment [default]:
 
     #        Looking for resources needed for deployment:
     #        Creating the required resources...
@@ -352,18 +353,28 @@ For more information, refer to [Delete data](/develop/dev-guide-delete-data.md).
 
 - Using [connection pools](https://github.com/sidorares/node-mysql2#using-connection-pools) to manage database connections can reduce the performance overhead caused by frequently establishing and destroying connections.
 - To avoid SQL injection, it is recommended to use [prepared statements](https://github.com/sidorares/node-mysql2#using-prepared-statements).
-- In scenarios where there are not many complex SQL statements involved, using ORM frameworks like [Sequelize](https://sequelize.org/), [TypeORM](https://typeorm.io/), or [Prisma](https://www.prisma.io/) can greatly improve development efficiency. 
+- In scenarios where there are not many complex SQL statements involved, using ORM frameworks like [Sequelize](https://sequelize.org/), [TypeORM](https://typeorm.io/), or [Prisma](https://www.prisma.io/) can greatly improve development efficiency.
 - For building a RESTful API for your application, it is recommended to [use AWS Lambda with API Gateway](https://docs.aws.amazon.com/lambda/latest/dg/services-apigateway.html).
 - For designing high-performance applications using TiDB Serverless and AWS Lambda, refer to [this blog](https://aws.amazon.com/blogs/apn/designing-high-performance-applications-using-serverless-tidb-cloud-and-aws-lambda/).
 
 ## Next steps
 
 - For more details on how to use TiDB in AWS Lambda Function, see our [TiDB-Lambda-integration/aws-lambda-bookstore Demo](https://github.com/pingcap/TiDB-Lambda-integration/blob/main/aws-lambda-bookstore/README.md). You can also use AWS API Gateway to build a RESTful API for your application.
-- Learn more usage of `mysql2` from [the documentation of `mysql2`](https://github.com/sidorares/node-mysql2/tree/master/documentation/en).
+- Learn more usage of `mysql2` from [the documentation of `mysql2`](https://sidorares.github.io/node-mysql2/docs/documentation).
 - Learn more usage of AWS Lambda from [the AWS developer guide of `Lambda`](https://docs.aws.amazon.com/lambda/latest/dg/welcome.html).
 - Learn the best practices for TiDB application development with the chapters in the [Developer guide](/develop/dev-guide-overview.md), such as [Insert data](/develop/dev-guide-insert-data.md), [Update data](/develop/dev-guide-update-data.md), [Delete data](/develop/dev-guide-delete-data.md), [Single table reading](/develop/dev-guide-get-data-from-single-table.md), [Transactions](/develop/dev-guide-transaction-overview.md), and [SQL performance optimization](/develop/dev-guide-optimize-sql-overview.md).
 - Learn through the professional [TiDB developer courses](https://www.pingcap.com/education/) and earn [TiDB certifications](https://www.pingcap.com/education/certification/) after passing the exam.
 
 ## Need help?
 
-Ask questions on the [Discord](https://discord.gg/vYU9h56kAX), or [create a support ticket](https://support.pingcap.com/).
+<CustomContent platform="tidb">
+
+Ask questions on the [Discord](https://discord.gg/DQZ2dy3cuc?utm_source=doc), or [create a support ticket](/support.md).
+
+</CustomContent>
+
+<CustomContent platform="tidb-cloud">
+
+Ask questions on the [Discord](https://discord.gg/DQZ2dy3cuc?utm_source=doc), or [create a support ticket](https://support.pingcap.com/).
+
+</CustomContent>

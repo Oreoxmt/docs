@@ -5,7 +5,7 @@ summary: Learn about TiDB installation packages and the specific components incl
 
 # TiDB Installation Packages
 
-Before [deploying TiUP offline](/production-deployment-using-tiup.md#deploy-tiup-offline), you need to download the binary packages of TiDB at the [official download page](https://en.pingcap.com/download/).
+Before [deploying TiUP offline](/production-deployment-using-tiup.md#deploy-tiup-offline), you need to download the binary packages of TiDB as described in [Prepare the TiUP offline component package](/production-deployment-using-tiup.md#prepare-the-tiup-offline-component-package).
 
 TiDB binary packages are available in amd64 and arm64 architectures. In either architecture, TiDB provides two binary packages: `TiDB-community-server` and `TiDB-community-toolkit`.
 
@@ -31,6 +31,7 @@ The `TiDB-community-server` package contains the following contents.
 | diag-{version}-linux-{arch}.tar.gz | New in v6.0.0 |
 | influxdb-{version}-linux-{arch}.tar.gz |  |
 | playground-{version}-linux-{arch}.tar.gz |  |
+| tiproxy-{version}-linux-{arch}.tar.gz | New in v7.6.0 |
 
 > **Note:**
 >
@@ -53,8 +54,6 @@ The `TiDB-community-toolkit` package contains the following contents.
 | dm-master-{version}-linux-{arch}.tar.gz |  |
 | dmctl-{version}-linux-{arch}.tar.gz |  |
 | br-{version}-linux-{arch}.tar.gz |  |
-| spark-{version}-any-any.tar.gz |  |
-| tispark-{version}-any-any.tar.gz |  |
 | package-{version}-linux-{arch}.tar.gz |  |
 | bench-{version}-linux-{arch}.tar.gz |  |
 | errdoc-{version}-linux-{arch}.tar.gz |  |

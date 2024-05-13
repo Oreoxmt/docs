@@ -86,10 +86,11 @@ Connect to your TiDB cluster depending on the TiDB deployment option you've sele
 3. Ensure the configurations in the connection dialog match your operating environment.
 
     - **Endpoint Type** is set to `Public`.
+    - **Branch** is set to `main`.
     - **Connect With** is set to `General`.
     - **Operating System** matches the operating system where you run the application.
 
-4. If you have not set a password yet, click **Create password** to generate a random password.
+4. If you have not set a password yet, click **Generate Password** to generate a random password.
 
 5. Run the following command to copy `.env.example` and rename it to `.env`:
 
@@ -188,7 +189,7 @@ npm start
 If the connection is successful, the console will output the version of the TiDB cluster as follows:
 
 ```
-🔌 Connected to TiDB cluster! (TiDB version: 8.0.11-TiDB-v7.4.0)
+🔌 Connected to TiDB cluster! (TiDB version: 8.0.11-TiDB-v8.0.0)
 ⏳ Loading sample game data...
 ✅ Loaded sample game data.
 
@@ -331,4 +332,14 @@ For more information, refer to [Delete data](/develop/dev-guide-delete-data.md).
 
 ## Need help?
 
-Ask questions on the [Discord](https://discord.gg/vYU9h56kAX), or [create a support ticket](https://support.pingcap.com/).
+<CustomContent platform="tidb">
+
+Ask questions on the [Discord](https://discord.gg/DQZ2dy3cuc?utm_source=doc), or [create a support ticket](/support.md).
+
+</CustomContent>
+
+<CustomContent platform="tidb-cloud">
+
+Ask questions on the [Discord](https://discord.gg/DQZ2dy3cuc?utm_source=doc), or [create a support ticket](https://support.pingcap.com/).
+
+</CustomContent>

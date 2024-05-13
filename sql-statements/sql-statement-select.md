@@ -10,88 +10,48 @@ The `SELECT` statement is used to read data from TiDB.
 
 ## Synopsis
 
-**SelectStmt:**
-
-![SelectStmt](/media/sqlgram/SelectStmt.png)
-
-> **Note:**
->
-> The `SELECT ... INTO OUTFILE` statement is only applicable to TiDB Self-Hosted and not available on [TiDB Cloud](https://docs.pingcap.com/tidbcloud/).
-
-**FromDual:**
-
-![FromDual](/media/sqlgram/FromDual.png)
-
-**SelectStmtOpts:**
-
-![SelectStmtOpts](/media/sqlgram/SelectStmtOpts.png)
-
-**SelectStmtFieldList:**
-
-![SelectStmtFieldList](/media/sqlgram/SelectStmtFieldList.png)
-
-**TableRefsClause:**
-
 ```ebnf+diagram
+SelectStmt ::=
+    ( SelectStmtBasic | SelectStmtFromDualTable | SelectStmtFromTable )
+    OrderBy? SelectStmtLimit? SelectLockOpt? SelectStmtIntoOption
+
+SelectStmtBasic ::=
+    "SELECT" SelectStmtOpts Field ("," Field)* ( "HAVING" Expression)?
+
+SelectStmtFromDualTable ::=
+    "SELECT" SelectStmtOpts Field ("," Field)* "FROM" "DUAL" WhereClause?
+
+SelectStmtFromTable ::=
+    "SELECT" SelectStmtOpts Field ("," Field)* "FROM" TableRefsClause
+    WhereClause? GroupByClause? ( "HAVING" Expression)? WindowClause?
+
+SelectStmtOpts ::=
+    TableOptimizerHints DefaultFalseDistictOpt PriorityOpt SelectStmtSQLSmallResult
+    SelectStmtSQLBigResult SelectStmtSQLBufferResult SelectStmtSQLCache SelectStmtCalcFoundRows
+    SelectStmtStraightJoin
+
 TableRefsClause ::=
     TableRef AsOfClause? ( ',' TableRef AsOfClause? )*
 
 AsOfClause ::=
     'AS' 'OF' 'TIMESTAMP' Expression
-```
 
-**WhereClauseOptional:**
+SelectStmtLimit ::=
+    ("LIMIT" LimitOption ( ("," | "OFFSET") LimitOption )?
+| "FETCH" ("FIRST" | "NEXT") LimitOption? ("ROW" | "ROWS") "ONLY" )
 
-![WhereClauseOptional](/media/sqlgram/WhereClauseOptional.png)
-
-**SelectStmtGroup:**
-
-![SelectStmtGroup](/media/sqlgram/SelectStmtGroup.png)
-
-**HavingClause:**
-
-![HavingClause](/media/sqlgram/HavingClause.png)
-
-**OrderByOptional:**
-
-![OrderByOptional](/media/sqlgram/OrderByOptional.png)
-
-**SelectStmtLimit:**
-
-![SelectStmtLimit](/media/sqlgram/SelectStmtLimit.png)
-
-**FirstOrNext:**
-
-![FirstOrNext](/media/sqlgram/FirstOrNext.png)
-
-**FetchFirstOpt:**
-
-![FetchFirstOpt](/media/sqlgram/FetchFirstOpt.png)
-
-**RowOrRows:**
-
-![RowOrRows](/media/sqlgram/RowOrRows.png)
-
-**SelectLockOpt:**
-
-```ebnf+diagram
 SelectLockOpt ::= 
-    ( ( 'FOR' 'UPDATE' ( 'OF' TableList )? 'NOWAIT'? )
-|   ( 'LOCK' 'IN' 'SHARE' 'MODE' ) )?
+    ( 'FOR' 'UPDATE' ( 'OF' TableList )? 'NOWAIT'?
+|   'LOCK' 'IN' 'SHARE' 'MODE' )
 
 TableList ::=
     TableName ( ',' TableName )*
-```
 
-**WindowClauseOptional**
+WindowClause ::=
+    "WINDOW" WindowDefinition ("," WindowDefinition)*
 
-![WindowClauseOptional](/media/sqlgram/WindowClauseOptional.png)
-
-**TableSampleOpt**
-
-```ebnf+diagram
 TableSampleOpt ::=
-    'TABLESAMPLE' 'REGIONS()'
+    'TABLESAMPLE' 'REGIONS' '(' ')'
 ```
 
 ## Description of the syntax elements
@@ -117,6 +77,8 @@ TableSampleOpt ::=
 | `TABLESAMPLE` | To get a sample of rows from the table. |
 
 ## Examples
+
+### SELECT
 
 ```sql
 mysql> CREATE TABLE t1 (id INT NOT NULL PRIMARY KEY AUTO_INCREMENT, c1 INT NOT NULL);
@@ -159,11 +121,85 @@ mysql> SELECT AVG(s_quantity), COUNT(s_quantity) FROM stock;
 
 The above example uses data generated with `tiup bench tpcc prepare`. The first query shows the use of `TABLESAMPLE`.
 
+### SELECT ... INTO OUTFILE
+
+The `SELECT ... INTO OUTFILE` statement is used to write the result of a query to a file.
+
+> **Note:**
+>
+> - This statement is only applicable to TiDB Self-Hosted and not available on [TiDB Cloud](https://docs.pingcap.com/tidbcloud/).
+> - This statement does not support writing query results to any [external storages](https://docs.pingcap.com/tidb/stable/backup-and-restore-storages) such as Amazon S3 or GCS.
+
+In the statement, you can specify the format of the output file by using the following clauses:
+
+- `FIELDS TERMINATED BY`: specifies the field delimiter in the file. For example, you can specify it as `','` to output comma-separated values (CSV) or `'\t'` to output tab-separated values (TSV).
+- `FIELDS ENCLOSED BY`: specifies the enclosing character that wraps around each field in the file.
+- `LINES TERMINATED BY`: specifies the line terminator in the file, if you want to end a line with a certain character.
+
+Assume that there is a table `t` with three columns as follows:
+
+```sql
+mysql> CREATE TABLE t (a INT, b VARCHAR(10), c DECIMAL(10,2));
+Query OK, 0 rows affected (0.02 sec)
+
+mysql> INSERT INTO t VALUES (1, 'a', 1.1), (2, 'b', 2.2), (3, 'c', 3.3);
+Query OK, 3 rows affected (0.01 sec)
+```
+
+The following examples show how to use the `SELECT ... INTO OUTFILE` statement to write the query result to a file.
+
+**Example 1:**
+
+```sql
+mysql> SELECT * FROM t INTO OUTFILE '/tmp/tmp_file1';
+Query OK, 3 rows affected (0.00 sec)
+```
+
+In this example, you can find the query result in `/tmp/tmp_file1` as follows:
+
+```
+1       a       1.10
+2       b       2.20
+3       c       3.30
+```
+
+**Example 2:**
+
+```sql
+mysql> SELECT * FROM t INTO OUTFILE '/tmp/tmp_file2' FIELDS TERMINATED BY ',' ENCLOSED BY '"';
+Query OK, 3 rows affected (0.00 sec)
+```
+
+In this example, you can find the query result in `/tmp/tmp_file2` as follows:
+
+```
+"1","a","1.10"
+"2","b","2.20"
+"3","c","3.30"
+```
+
+**Example 3:**
+
+```sql
+mysql> SELECT * FROM t INTO OUTFILE '/tmp/tmp_file3'
+    -> FIELDS TERMINATED BY ',' ENCLOSED BY '\'' LINES TERMINATED BY '<<<\n';
+Query OK, 3 rows affected (0.00 sec)
+```
+
+In this example, you can find the query result in `/tmp/tmp_file3` as follows:
+
+```
+'1','a','1.10'<<<
+'2','b','2.20'<<<
+'3','c','3.30'<<<
+```
+
 ## MySQL compatibility
 
 - The syntax `SELECT ... INTO @variable` is not supported.
+- The syntax `SELECT ... INTO DUMPFILE` is not supported.
 - The syntax `SELECT .. GROUP BY expr` does not imply `GROUP BY expr ORDER BY expr` as it does in MySQL 5.7. TiDB instead matches the behavior of MySQL 8.0 and does not imply a default order.
-- The syntax `SELECT ... TABLESAMPLE ...` is a TiDB extension and not supported by MySQL.
+- The syntax `SELECT ... TABLESAMPLE ...` is a TiDB extension designed for compatibility with other database systems and the [ISO/IEC 9075-2](https://standards.iso.org/iso-iec/9075/-2/ed-6/en/) standard, but currently it is not supported by MySQL.
 
 ## See also
 

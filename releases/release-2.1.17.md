@@ -1,6 +1,7 @@
 ---
 title: TiDB 2.1.17 Release Notes
 aliases: ['/docs/dev/releases/release-2.1.17/','/docs/dev/releases/2.1.17/']
+summary: "TiDB 2.1.17 Release Notes: New features include `WHERE` clause in `SHOW TABLE REGIONS`, `config-check` feature in TiKV and PD, `remove-tombstone` command in pd-ctl, and `worker-count` and `txn-batch` configuration items in Reparo. Improvements in PD’s scheduling process and TiKV’s starting process. Changed behaviors in TiDB slow query logs and configuration files. Fixes and optimizations in SQL Optimizer, SQL Execution Engine, Server, DDL, Monitor, TiKV, PD, TiDB Binlog, TiDB Lightning, and TiDB Ansible."
 ---
 
 # TiDB 2.1.17 Release Notes
@@ -45,7 +46,7 @@ TiDB Ansible version: 2.1.17
     - Change `start ts` recorded in slow query logs from the last retry time to the first execution time when retrying TiDB transactions [#11878](https://github.com/pingcap/tidb/pull/11878)
     - Add the number of keys of a transaction in `LockResolver` to avoid the scan operation on the whole Region and reduce costs of resolving locking when the number of keys is reduced [#11889](https://github.com/pingcap/tidb/pull/11889)
     - Fix the issue that the `succ` field value might be incorrect in slow query logs [#11886](https://github.com/pingcap/tidb/pull/11886)
-    - Replace the `Index_ids` filed in slow query logs with the `Index_names` field to improve the usability of slow query logs [#12063](https://github.com/pingcap/tidb/pull/12063)
+    - Replace the `Index_ids` field in slow query logs with the `Index_names` field to improve the usability of slow query logs [#12063](https://github.com/pingcap/tidb/pull/12063)
     - Fix the connection break issue caused by TiDB parsing `-` into EOF Error when `Duration` contains `-` (like `select time(‘--’)`) [#11910](https://github.com/pingcap/tidb/pull/11910)
     - Remove an invalid Region from `RegionCache` more quickly to reduce the number of requests sent to this Region [#11931](https://github.com/pingcap/tidb/pull/11931)
     - Fix the connection break issue caused by incorrectly handling the OOM panic issue when `oom-action = "cancel"` and OOM occurs in the `Insert Into … Select` syntax [#12126](https://github.com/pingcap/tidb/pull/12126)

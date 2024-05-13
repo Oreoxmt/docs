@@ -1,6 +1,7 @@
 ---
 title: Connect to TiDB with JDBC
 summary: Learn how to connect to TiDB using JDBC. This tutorial gives Java sample code snippets that work with TiDB using JDBC.
+aliases: ['/tidb/dev/sample-application-java','/tidb/dev/dev-guide-sample-application-java']
 ---
 
 # Connect to TiDB with JDBC
@@ -36,6 +37,10 @@ To complete this tutorial, you need:
 </CustomContent>
 <CustomContent platform="tidb-cloud">
 
+> **Note:**
+>
+> For security considerations, it is recommended that you use `VERIFY_IDENTITY` to establish TLS connections to TiDB clusters when connecting over the internet. Both TiDB Serverless and TiDB Dedicated use Subject Alternative Name (SAN) certificates, which require MySQL Connector/J version to be greater than or equal to [8.0.22](https://dev.mysql.com/doc/relnotes/connector-j/8.0/en/news-8-0-22.html).
+
 **If you don't have a TiDB cluster, you can create one as follows:**
 
 - (Recommended) Follow [Creating a TiDB Serverless cluster](/develop/dev-guide-build-cluster-in-cloud.md) to create your own TiDB Cloud cluster.
@@ -70,6 +75,7 @@ Connect to your TiDB cluster depending on the TiDB deployment option you've sele
 3. Ensure the configurations in the connection dialog match your operating environment.
 
     - **Endpoint Type** is set to `Public`
+    - **Branch** is set to `main`
     - **Connect With** is set to `General`
     - **Operating System** matches your environment.
 
@@ -77,11 +83,11 @@ Connect to your TiDB cluster depending on the TiDB deployment option you've sele
     >
     > If your program is running in Windows Subsystem for Linux (WSL), switch to the corresponding Linux distribution.
 
-4. Click **Create password** to create a random password.
+4. Click **Generate Password** to create a random password.
 
     > **Tip:**
     >
-    > If you have created a password before, you can either use the original password or click **Reset password** to generate a new one.
+    > If you have created a password before, you can either use the original password or click **Reset Password** to generate a new one.
 
 5. Run the following command to copy `env.sh.example` and rename it to `env.sh`:
 
@@ -291,11 +297,21 @@ Unless you need to write complex SQL statements, it is recommended to use [ORM](
 
 ## Next steps
 
-- Learn more usage of MySQL Connector/J from [the documentation of MySQL Connector/J](https://dev.mysql.com/doc/connector-j/8.1/en/).
+- Learn more usage of MySQL Connector/J from [the documentation of MySQL Connector/J](https://dev.mysql.com/doc/connector-j/en/).
 - Learn the best practices for TiDB application development with the chapters in the [Developer guide](/develop/dev-guide-overview.md), such as [Insert data](/develop/dev-guide-insert-data.md), [Update data](/develop/dev-guide-update-data.md), [Delete data](/develop/dev-guide-delete-data.md), [Single table reading](/develop/dev-guide-get-data-from-single-table.md), [Transactions](/develop/dev-guide-transaction-overview.md), and [SQL performance optimization](/develop/dev-guide-optimize-sql-overview.md).
 - Learn through the professional [TiDB developer courses](https://www.pingcap.com/education/) and earn [TiDB certifications](https://www.pingcap.com/education/certification/) after passing the exam.
 - Learn through the course for Java developers: [Working with TiDB from Java](https://eng.edu.pingcap.com/catalog/info/id:212).
 
 ## Need help?
 
-Ask questions on the [Discord](https://discord.gg/vYU9h56kAX), or [create a support ticket](https://support.pingcap.com/).
+<CustomContent platform="tidb">
+
+Ask questions on the [Discord](https://discord.gg/DQZ2dy3cuc?utm_source=doc), or [create a support ticket](/support.md).
+
+</CustomContent>
+
+<CustomContent platform="tidb-cloud">
+
+Ask questions on the [Discord](https://discord.gg/DQZ2dy3cuc?utm_source=doc), or [create a support ticket](https://support.pingcap.com/).
+
+</CustomContent>
