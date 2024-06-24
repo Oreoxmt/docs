@@ -104,7 +104,7 @@ def text_to_embedding(text):
 
 ### Step 5. Connect to the TiDB cluster
 
-Use the `tidb_vector.integrations.TiDBVectorClient()` function to connect to your TiDB cluster and create a table `embedded_documents` with a vector column to serve as the vector store.
+Use the `TiDBVectorClient` class to connect to your TiDB cluster and create a table `embedded_documents` with a vector column to serve as the vector store.
 
 > **Note**
 > 
