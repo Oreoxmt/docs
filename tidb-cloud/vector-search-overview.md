@@ -15,7 +15,7 @@ The vector search (beta) feature in TiDB Cloud provides an advanced search solut
 
 Vector search is a search method that prioritizes the meaning of your data to deliver relevant results. This differs from traditional full-text search, which relies primarily on exact keyword matches and word frequency.
 
-For example, a full-text search for "a swimming animal" only returns results with those exact words. In contrast, vector search can return results for other swimming animals, such as fish or ducks, even if the exact keywords are not present.
+For example, a full-text search for "a swimming animal" only returns results with those exact keywords. In contrast, vector search can return results for other swimming animals, such as fish or ducks, even if the exact keywords are not present.
 
 ### Vector embedding
 
